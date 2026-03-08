@@ -138,6 +138,28 @@ Node dependencies are managed through [package.json](package.json).
 - [Changelog](CHANGELOG.md)
 - [Roadmap](ROADMAP)
 
+## AI analytics module
+
+The repository includes a lightweight analytics module that reads the SQLite database, aggregates club metrics, and can send them to the OpenAI API for a structured report.
+
+Metrics-only mode:
+
+```bash
+php ai/analyze.php --metrics-only
+```
+
+Full AI analysis:
+
+```bash
+php ai/analyze.php
+```
+
+Optional flags:
+
+- `--db=club.db` to point to another SQLite file
+- `--json` to print JSON instead of a console report
+- `--save=reports/latest.txt` to write the output to a file
+
 ## Screenshots
 
 ### Bot and onboarding

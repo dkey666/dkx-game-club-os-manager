@@ -24,6 +24,32 @@ The analytics layer can support recommendations such as:
 - which engagement mechanics are driving repeat usage
 - which operational changes could improve retention or workstation utilization
 
+## Light module
+
+This repository now includes a lightweight first-version analytics module in [ai/analyze.php](../ai/analyze.php).
+
+What the light version does:
+
+- reads the SQLite database directly
+- aggregates operational and engagement metrics with SQL
+- sends a structured analytics request to the OpenAI Responses API
+- returns a concise report with behavior insights, booking insights, engagement insights, and recommendations
+
+Current scope:
+
+- user counts and registrations
+- booking volumes, top halls, top PCs, and busiest weekdays
+- task completions
+- referrals
+- daily rewards
+- tap reward activity
+- points economy
+- rank distribution
+
+Current limitation:
+
+- it is SQL-first and does not yet inspect deeper code-level logic, frontend funnels, or hidden business rules
+
 ## Safe boundaries
 
 The analytics module should:
