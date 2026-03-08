@@ -1105,6 +1105,7 @@ switch ($action) {
         // Возвращаем только публичную конфигурацию для фронтенда
         echo json_encode([
             'adminIds' => Config::getAdmins(),
+            'botUsername' => BOT_USERNAME,
             'hallsConfig' => [
                 'main' => [
                     'name' => 'Main',

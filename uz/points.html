@@ -815,6 +815,22 @@
   
   <script>
     const tgUser = window.Telegram.WebApp.initDataUnsafe.user;
+    let publicConfigPromise = null;
+    
+    function loadPublicConfig() {
+      if (!publicConfigPromise) {
+        publicConfigPromise = fetch('api.php?action=get_config')
+          .then(response => response.ok ? response.json() : {})
+          .catch(() => ({}));
+      }
+      return publicConfigPromise;
+    }
+    
+    async function buildReferralUrl() {
+      const config = await loadPublicConfig();
+      const botUsername = config.botUsername || 'your_test_bot_username';
+      return `https://t.me/${botUsername}?start=ref_${tgUser.id}`;
+    }
     let user = null;
     let tasks = [];
     let clicksData = { today: 0, earned: 0, isBlocked: false };
@@ -1152,7 +1168,7 @@
         
         const linkElement = document.getElementById('referralLink');
         if (linkElement) {
-          linkElement.textContent = `https://t.me/asuscs_bot?start=ref_${tgUser.id}`;
+          linkElement.textContent = await buildReferralUrl();
         }
         
         const countElement = document.getElementById('referralCount');
@@ -1180,7 +1196,7 @@
         
         const linkElement = document.getElementById('referralLink');
         if (linkElement) {
-          linkElement.textContent = `https://t.me/asuscs_bot?start=ref_${tgUser.id}`;
+          linkElement.textContent = await buildReferralUrl();
         }
         
         const countElement = document.getElementById('referralCount');

@@ -102,9 +102,11 @@ if (Config::has('BOT_TOKEN') || Config::has('GROUP_ID')) {
     Config::validate();
 }
 define('BOT_TOKEN', Config::get('BOT_TOKEN'));
+define('BOT_USERNAME', ltrim(Config::get('BOT_USERNAME', ''), '@'));
 define('GROUP_ID', Config::get('GROUP_ID'));
 define('APP_NAME', Config::get('APP_NAME', 'Dkx Game Club OS/Manager'));
 define('APP_SHORT_NAME', Config::get('APP_SHORT_NAME', 'DKX Game Club'));
 define('APP_URL', rtrim(Config::get('APP_URL', 'http://localhost'), '/'));
 define('WEBAPP_URL', rtrim(Config::get('WEBAPP_URL', APP_URL . '/'), '/'));
 define('ADMIN_PANEL_URL', rtrim(Config::get('ADMIN_PANEL_URL', APP_URL . '/new.html'), '/'));
+define('BOT_URL', BOT_USERNAME ? 'https://t.me/' . BOT_USERNAME : 'https://t.me');

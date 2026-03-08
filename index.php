@@ -563,7 +563,7 @@ if (!$isTelegramAccess && !empty($userAgent)) {
             Это мини-приложение работает только через Telegram.<br>
             Для доступа откройте нашего бота в Telegram.
         </p>
-        <a href="https://t.me/asuscs_bot" class="telegram-link">
+        <a href="<?= htmlspecialchars(BOT_URL, ENT_QUOTES, 'UTF-8') ?>" class="telegram-link">
             📱 Открыть бота в Telegram
         </a>
         <div class="info">
@@ -1658,7 +1658,7 @@ const ADMIN_IDS = <?php echo $adminsJson; ?>;
             loadUserData();
             checkAdminRights();
         } else {
-            window.location.href = 'https://t.me/asuscs_bot';
+            window.location.href = <?= json_encode(BOT_URL) ?>;
         }
     
         // Загрузка данных пользователя

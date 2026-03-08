@@ -1227,11 +1227,23 @@
             tgUser = window.Telegram.WebApp.initDataUnsafe.user;
         }
         
-        const ADMINS = [5746148926, 226890911];
+        let ADMINS = [];
+        initAdminAccess();
 
-        if (!ADMINS.includes(tgUser?.id)) {
-            document.body.innerHTML = '<div style="text-align: center; padding: 50px; color: white;"><h2>❌ Доступ запрещен</h2><p>У вас нет прав администратора</p></div>';
-        } else {
+        async function initAdminAccess() {
+            try {
+                const response = await fetch('api.php?action=get_config');
+                const config = await response.json();
+                ADMINS = config.adminIds || [];
+            } catch (error) {
+                console.error('Failed to load admin config:', error);
+            }
+
+            if (!ADMINS.includes(tgUser?.id)) {
+                document.body.innerHTML = '<div style="text-align: center; padding: 50px; color: white;"><h2>❌ Доступ запрещен</h2><p>У вас нет прав администратора</p></div>';
+                return;
+            }
+
             loadComputers();
             initMiniActivityLog();
             initAnimations();

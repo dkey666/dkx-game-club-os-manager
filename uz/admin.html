@@ -870,16 +870,29 @@
         let selectedPcId = null;
         
         const tgUser = window.Telegram.WebApp.initDataUnsafe.user;
-        const ADMINS = [5746148926, 226890911];
+        let ADMINS = [];
         
         // Инициализация
         window.Telegram.WebApp.ready();
         window.Telegram.WebApp.expand();
         
         // Проверка прав админа
-        if (!ADMINS.includes(tgUser?.id)) {
-            document.body.innerHTML = '<div style="text-align: center; padding: 50px; color: white;"><h2>❌ Рухсат берилмаган</h2><p>Сизда администратор ҳуқуқлари йўқ</p></div>';
-        } else {
+        initAdminAccess();
+
+        async function initAdminAccess() {
+            try {
+                const response = await fetch('api.php?action=get_config');
+                const config = await response.json();
+                ADMINS = config.adminIds || [];
+            } catch (error) {
+                console.error('Failed to load admin config:', error);
+            }
+
+            if (!ADMINS.includes(tgUser?.id)) {
+                document.body.innerHTML = '<div style="text-align: center; padding: 50px; color: white;"><h2>❌ Рухсат берилмаган</h2><p>Сизда администратор ҳуқуқлари йўқ</p></div>';
+                return;
+            }
+
             loadComputers();
         }
         
