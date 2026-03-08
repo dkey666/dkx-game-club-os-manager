@@ -819,8 +819,28 @@
     
     function loadPublicConfig() {
       if (!publicConfigPromise) {
+        const cachedConfig = sessionStorage.getItem('dkx_public_config');
+        if (cachedConfig) {
+          try {
+            const parsed = JSON.parse(cachedConfig);
+            if (Date.now() - parsed.cachedAt < 60000) {
+              publicConfigPromise = Promise.resolve(parsed.data);
+              return publicConfigPromise;
+            }
+          } catch (error) {
+            console.warn('Failed to read cached public config:', error);
+          }
+        }
+
         publicConfigPromise = fetch('api.php?action=get_config')
           .then(response => response.ok ? response.json() : {})
+          .then(config => {
+            sessionStorage.setItem('dkx_public_config', JSON.stringify({
+              cachedAt: Date.now(),
+              data: config
+            }));
+            return config;
+          })
           .catch(() => ({}));
       }
       return publicConfigPromise;

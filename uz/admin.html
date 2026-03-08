@@ -872,6 +872,38 @@
         const tgUser = window.Telegram.WebApp.initDataUnsafe.user;
         let ADMINS = [];
         
+        function loadPublicConfig() {
+            if (window.__dkxPublicConfigPromise) {
+                return window.__dkxPublicConfigPromise;
+            }
+
+            const cachedConfig = sessionStorage.getItem('dkx_public_config');
+            if (cachedConfig) {
+                try {
+                    const parsed = JSON.parse(cachedConfig);
+                    if (Date.now() - parsed.cachedAt < 60000) {
+                        window.__dkxPublicConfigPromise = Promise.resolve(parsed.data);
+                        return window.__dkxPublicConfigPromise;
+                    }
+                } catch (error) {
+                    console.warn('Failed to read cached public config:', error);
+                }
+            }
+
+            window.__dkxPublicConfigPromise = fetch('api.php?action=get_config')
+                .then(response => response.ok ? response.json() : {})
+                .then(config => {
+                    sessionStorage.setItem('dkx_public_config', JSON.stringify({
+                        cachedAt: Date.now(),
+                        data: config
+                    }));
+                    return config;
+                })
+                .catch(() => ({}));
+
+            return window.__dkxPublicConfigPromise;
+        }
+        
         // Инициализация
         window.Telegram.WebApp.ready();
         window.Telegram.WebApp.expand();
@@ -881,8 +913,7 @@
 
         async function initAdminAccess() {
             try {
-                const response = await fetch('api.php?action=get_config');
-                const config = await response.json();
+                const config = await loadPublicConfig();
                 ADMINS = config.adminIds || [];
             } catch (error) {
                 console.error('Failed to load admin config:', error);
