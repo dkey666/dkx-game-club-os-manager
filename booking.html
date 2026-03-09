@@ -14,6 +14,7 @@
     ">
     <title>🎮 Booking - DKX Game Club</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="/scripts/i18n.js"></script>
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800;900&display=swap');
         * {
@@ -671,7 +672,7 @@
         </div>
         
         <div class="booking-form" id="bookingForm">
-            <h3>Бронирование ПК №<span id="selectedPcNumber"></span></h3>
+            <h3><span id="bookingFormTitle">Бронирование ПК №</span><span id="selectedPcNumber"></span></h3>
             <div class="form-group">
                 <label class="form-label">Ваше имя</label>
                 <input type="text" class="form-input" id="userName" placeholder="Введите ваше имя">
@@ -688,6 +689,137 @@
     </div>
     
     <script>
+        const bookingTranslations = {
+            ru: {
+                title: '🖥️ Бронирование ПК',
+                pageTitle: 'Booking - DKX Game Club',
+                back: 'Назад',
+                halls: ['Зал 1', 'Зал 2', 'Зал 3'],
+                hallDescriptions: {
+                    1: '🎯 Онлайн игры: CS2, Valorant, Dota 2, LoL и др.',
+                    2: '⚔️ Смешанный: 5 ПК онлайн + 5 ПК CS 1.6',
+                    3: '🏆 Ретро: Оффлайн игры и классические шутеры'
+                },
+                legend: {
+                    free: 'Свободен',
+                    occupied: 'Занят',
+                    booked: 'Забронирован'
+                },
+                formTitle: 'Бронирование ПК №',
+                pcLabel: 'ПК',
+                nameLabel: 'Ваше имя',
+                namePlaceholder: 'Введите ваше имя',
+                phoneLabel: 'Номер телефона',
+                phonePlaceholder: '+998 XX XXX XX XX',
+                cancel: 'Отмена',
+                submit: 'Забронировать',
+                sending: 'Отправляем...',
+                alerts: {
+                    init: 'Ошибка инициализации',
+                    unavailable: 'Этот ПК недоступен для бронирования',
+                    fillAll: 'Заполните все поля',
+                    phone: 'Неверный формат телефона',
+                    user: 'Ошибка данных пользователя',
+                    success: 'Запрос отправлен!',
+                    generic: 'Ошибка',
+                    later: 'Ошибка. Попробуйте позже.'
+                }
+            },
+            uz: {
+                title: '🖥️ ПК брон қилиш',
+                pageTitle: 'Bron qilish - DKX Game Club',
+                back: 'Орқага',
+                halls: ['Зал 1', 'Зал 2', 'Зал 3'],
+                hallDescriptions: {
+                    1: '🎯 Онлайн ўйинлар: CS2, Valorant, Dota 2, LoL ва бошқ.',
+                    2: '⚔️ Аралаш: 5 ПК онлайн + 5 ПК CS 1.6',
+                    3: '🏆 Ретро: оффлайн ўйинлар ва классик шутерлар'
+                },
+                legend: {
+                    free: 'Бўш',
+                    occupied: 'Банд',
+                    booked: 'Брон қилинган'
+                },
+                formTitle: 'ПК №',
+                pcLabel: 'ПК',
+                nameLabel: 'Исмингиз',
+                namePlaceholder: 'Исмингизни киритинг',
+                phoneLabel: 'Телефон рақами',
+                phonePlaceholder: '+998 XX XXX XX XX',
+                cancel: 'Бекор қилиш',
+                submit: 'Брон қилиш',
+                sending: 'Юборилмоқда...',
+                alerts: {
+                    init: 'Ишга тушириш хатоси',
+                    unavailable: 'Бу ПК брон қилиш учун мавжуд эмас',
+                    fillAll: 'Барча майдонларни тўлдиринг',
+                    phone: 'Телефон формати нотўғри',
+                    user: 'Фойдаланувчи маълумотларида хато',
+                    success: 'Сўров юборилди!',
+                    generic: 'Хатолик',
+                    later: 'Хатолик. Кейинроқ қайта уриниб кўринг.'
+                }
+            },
+            en: {
+                title: '🖥️ PC Booking',
+                pageTitle: 'PC Booking - DKX Game Club',
+                back: 'Back',
+                halls: ['Hall 1', 'Hall 2', 'Hall 3'],
+                hallDescriptions: {
+                    1: '🎯 Online games: CS2, Valorant, Dota 2, LoL and more.',
+                    2: '⚔️ Mixed: 5 online PCs + 5 CS 1.6 PCs',
+                    3: '🏆 Retro: offline games and classic shooters'
+                },
+                legend: {
+                    free: 'Available',
+                    occupied: 'Busy',
+                    booked: 'Booked'
+                },
+                formTitle: 'Book PC #',
+                pcLabel: 'PC',
+                nameLabel: 'Your name',
+                namePlaceholder: 'Enter your name',
+                phoneLabel: 'Phone number',
+                phonePlaceholder: '+998 XX XXX XX XX',
+                cancel: 'Cancel',
+                submit: 'Book now',
+                sending: 'Sending...',
+                alerts: {
+                    init: 'Initialization error',
+                    unavailable: 'This PC is not available for booking',
+                    fillAll: 'Fill in all fields',
+                    phone: 'Invalid phone format',
+                    user: 'User data error',
+                    success: 'Request sent!',
+                    generic: 'Error',
+                    later: 'Error. Please try again later.'
+                }
+            }
+        };
+        const t = DKXI18n.createTranslator(bookingTranslations);
+
+        function applyBookingTranslations() {
+            document.title = t('pageTitle');
+            document.documentElement.lang = DKXI18n.getCurrentLanguage();
+            document.querySelector('.back-btn span').textContent = t('back');
+            document.querySelector('.title').textContent = t('title');
+            document.querySelectorAll('.hall-btn').forEach((button, index) => {
+                button.textContent = t(`halls.${index}`);
+            });
+            document.getElementById('hallDescription').textContent = t(`hallDescriptions.${currentHall}`);
+            const legendItems = document.querySelectorAll('.legend-item span');
+            legendItems[0].textContent = t('legend.free');
+            legendItems[1].textContent = t('legend.occupied');
+            legendItems[2].textContent = t('legend.booked');
+            document.getElementById('bookingFormTitle').textContent = t('formTitle');
+            document.querySelectorAll('.form-label')[0].textContent = t('nameLabel');
+            document.querySelectorAll('.form-label')[1].textContent = t('phoneLabel');
+            document.getElementById('userName').placeholder = t('namePlaceholder');
+            document.getElementById('userPhone').placeholder = t('phonePlaceholder');
+            document.querySelector('.btn-secondary').textContent = t('cancel');
+            document.querySelector('.btn-primary').textContent = t('submit');
+        }
+
         // CSRF токен
         const csrfToken = Math.random().toString(36).substring(2);
         sessionStorage.setItem('csrf', csrfToken);
@@ -695,7 +827,7 @@
         // Валидация initData
         const initData = window.Telegram.WebApp.initData;
         if (!initData) {
-            window.Telegram.WebApp.showAlert('Ошибка инициализации');
+            window.Telegram.WebApp.showAlert(t('alerts.init'));
             window.Telegram.WebApp.close();
         }
         
@@ -735,19 +867,6 @@
             }
         }
         
-        const hallDescriptions = {
-            ru: {
-                1: '🎯 Онлайн игры: CS2, Valorant, Dota 2, LoL и др.',
-                2: '⚔️ Смешанный: 5 ПК онлайн + 5 ПК CS 1.6',
-                3: '🏆 Ретро: Оффлайн игры и классические шутеры'
-            },
-            uz: {
-                1: '🎯 Онлайн ўйинлар: CS2, Valorant, Dota 2, LoL ва бошқ.',
-                2: '⚔️ Аралаш: 5 ПК онлайн + 5 ПК CS 1.6',
-                3: '🏆 Ретро: Оффлайн ўйинлар ва классик шутерлар'
-            }
-        };
-        
         function switchHall(hall) {
             currentHall = hall;
             
@@ -761,10 +880,7 @@
             container.classList.add(`hall-${hall}`);
             
             // Получаем текущий язык
-            const currentLang = localStorage.getItem('selectedLanguage') || 'ru';
-            
-            // Напрямую обновляем текст описания
-            document.getElementById('hallDescription').textContent = hallDescriptions[currentLang][hall];
+            document.getElementById('hallDescription').textContent = t(`hallDescriptions.${hall}`);
             
             // Перерисовываем компьютеры
             renderComputers();
@@ -776,22 +892,6 @@
             const endPc = currentHall * 10;
             
             // Получаем текущий язык
-            const currentLang = localStorage.getItem('selectedLanguage') || 'ru';
-            
-            // Переводы статусов
-            const statusTranslations = {
-                ru: {
-                    free: 'Свободен',
-                    occupied: 'Занят',
-                    booked: 'Забронирован'
-                },
-                uz: {
-                    free: "Bo'sh",
-                    occupied: 'Band',
-                    booked: 'Bron qilingan'
-                }
-            };
-            
             grid.innerHTML = '';
             
             // Проверяем, загружены ли данные о компьютерах
@@ -808,12 +908,12 @@
                 computerEl.className = `computer ${status}`;
                 computerEl.onclick = () => selectComputer(i);
                 
-                const statusText = statusTranslations[currentLang][status] || statusTranslations.ru[status];
+                const statusText = t(`legend.${status}`);
                 
                 computerEl.innerHTML = `
                     <div class="computer-content">
                         <div class="computer-icon"></div>
-                        <div class="computer-number">ПК ${i}</div>
+                        <div class="computer-number">${t('pcLabel')} ${i}</div>
                         <div class="computer-status">${statusText}</div>
                     </div>
                 `;
@@ -826,12 +926,13 @@
             const computer = computers.find(c => c.id === pcId);
             
             if (computer && computer.status !== 'free') {
-                window.Telegram.WebApp.showAlert('Этот ПК недоступен для бронирования');
+                window.Telegram.WebApp.showAlert(t('alerts.unavailable'));
                 return;
             }
             
             selectedPc = pcId;
             document.getElementById('selectedPcNumber').textContent = pcId;
+            document.getElementById('bookingFormTitle').textContent = t('formTitle');
             document.getElementById('bookingForm').style.display = 'block';
             document.getElementById('bookingForm').scrollIntoView({ behavior: 'smooth' });
         }
@@ -848,24 +949,24 @@
             const userPhone = document.getElementById('userPhone').value.trim();
             
             if (!userName || !userPhone) {
-                window.Telegram.WebApp.showAlert('Заполните все поля');
+                window.Telegram.WebApp.showAlert(t('alerts.fillAll'));
                 return;
             }
             
             // Валидация телефона
             if (!/^\+998\d{9}$/.test(userPhone.replace(/\s/g, ''))) {
-                window.Telegram.WebApp.showAlert('Неверный формат телефона');
+                window.Telegram.WebApp.showAlert(t('alerts.phone'));
                 return;
             }
             
             if (!tgUser) {
-                window.Telegram.WebApp.showAlert('Ошибка данных пользователя');
+                window.Telegram.WebApp.showAlert(t('alerts.user'));
                 return;
             }
             
             const btn = document.querySelector('.btn-primary');
             btn.disabled = true;
-            btn.textContent = 'Отправляем...';
+            btn.textContent = t('sending');
             
             try {
                 const response = await secureFetch('api.php?action=booking_request', {
@@ -882,17 +983,17 @@
                 const result = await response.json();
                 
                 if (result.success) {
-                    window.Telegram.WebApp.showAlert('Запрос отправлен!');
+                    window.Telegram.WebApp.showAlert(t('alerts.success'));
                     cancelBooking();
                     loadComputers();
                 } else {
-                    window.Telegram.WebApp.showAlert(result.message || 'Ошибка');
+                    window.Telegram.WebApp.showAlert(result.message || t('alerts.generic'));
                 }
             } catch (error) {
-                window.Telegram.WebApp.showAlert('Ошибка. Попробуйте позже.');
+                window.Telegram.WebApp.showAlert(t('alerts.later'));
             } finally {
                 btn.disabled = false;
-                btn.textContent = 'Забронировать';
+                btn.textContent = t('submit');
             }
         }
         
@@ -911,6 +1012,7 @@
         });
         
         document.addEventListener('DOMContentLoaded', function() {
+            applyBookingTranslations();
             // Обработчик для кнопки "Отмена"
             document.querySelector('.btn-secondary').onclick = cancelBooking;
             

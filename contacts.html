@@ -14,6 +14,7 @@
     ">
     <title>Contacts - DKX Game Club</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="/scripts/i18n.js"></script>
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800;900&display=swap');
     
@@ -399,9 +400,96 @@
         </style> 
     </div>
     <script>
+        const contactsTranslations = {
+            ru: {
+                pageTitle: 'Contacts - DKX Game Club',
+                back: 'Назад',
+                title: '📞 Контакты',
+                bookingPhone: 'Телефон для бронирования',
+                bookingHint: 'Replace with your public booking number before production deployment',
+                addressTitle: 'Наш адрес',
+                addressCity: 'Namangan, Uzbekistan',
+                addressHint: 'Replace with your public venue address before production deployment',
+                instagramHint: 'Следите за новостями и акциями',
+                locationTitle: '🗺️ Расположение',
+                venueAddress: '📍 Venue Address',
+                venueHint: 'Replace with your public venue address before production deployment',
+                mapHint: 'Map embed intentionally removed from the OSS template. Add your own public map widget for production.',
+                yandex: '🗺️ Яндекс.Карты',
+                socials: 'Мы в социальных сетях',
+                hoursTitle: '⏰ Режим работы',
+                hoursDays: 'Круглосуточно, 7 дней в неделю'
+            },
+            uz: {
+                pageTitle: 'Kontaktlar - DKX Game Club',
+                back: 'Орқага',
+                title: '📞 Контактлар',
+                bookingPhone: 'Брон қилиш учун телефон',
+                bookingHint: 'Продакшндан олдин оммавий брон рақамингизни киритинг',
+                addressTitle: 'Манзилимиз',
+                addressCity: 'Namangan, Uzbekistan',
+                addressHint: 'Продакшндан олдин оммавий манзилингизни киритинг',
+                instagramHint: 'Янгиликлар ва акцияларни кузатиб боринг',
+                locationTitle: '🗺️ Жойлашув',
+                venueAddress: '📍 Манзил',
+                venueHint: 'Продакшндан олдин оммавий манзилингизни киритинг',
+                mapHint: 'OSS шаблонда харита виджети олиб ташланган. Продакшнда ўзингизнинг оммавий харитангизни қўшинг.',
+                yandex: '🗺️ Яндекс хариталари',
+                socials: 'Ижтимоий тармоқларда биз',
+                hoursTitle: '⏰ Иш вақти',
+                hoursDays: 'Ҳар куни, туну кун'
+            },
+            en: {
+                pageTitle: 'Contacts - DKX Game Club',
+                back: 'Back',
+                title: '📞 Contacts',
+                bookingPhone: 'Booking phone',
+                bookingHint: 'Replace with your public booking number before production deployment',
+                addressTitle: 'Our address',
+                addressCity: 'Namangan, Uzbekistan',
+                addressHint: 'Replace with your public venue address before production deployment',
+                instagramHint: 'Follow updates and promotions',
+                locationTitle: '🗺️ Location',
+                venueAddress: '📍 Venue address',
+                venueHint: 'Replace with your public venue address before production deployment',
+                mapHint: 'Map embed was intentionally removed from the OSS template. Add your own public map widget for production.',
+                yandex: '🗺️ Yandex Maps',
+                socials: 'Find us on social media',
+                hoursTitle: '⏰ Working hours',
+                hoursDays: 'Open daily, 24/7'
+            }
+        };
+        const t = DKXI18n.createTranslator(contactsTranslations);
+
+        function applyContactsTranslations() {
+            document.title = t('pageTitle');
+            document.documentElement.lang = DKXI18n.getCurrentLanguage();
+            document.querySelector('[data-lang="back"]').textContent = t('back');
+            document.querySelector('.title').textContent = t('title');
+            const cards = document.querySelectorAll('.contact-item');
+            cards[0].querySelector('h3').textContent = t('bookingPhone');
+            cards[0].querySelectorAll('p')[1].textContent = t('bookingHint');
+            cards[1].querySelector('h3').textContent = t('addressTitle');
+            cards[1].querySelectorAll('p')[0].textContent = t('addressCity');
+            cards[1].querySelectorAll('p')[1].textContent = t('addressHint');
+            cards[2].querySelectorAll('p')[1].textContent = t('instagramHint');
+            document.querySelector('.map-container h2').textContent = t('locationTitle');
+            document.querySelector('.map-container h3').textContent = t('venueAddress');
+            document.querySelector('.map-container p').textContent = t('venueHint');
+            document.querySelector('.map-container .social-link, .map-container a[target="_blank"]').textContent = t('yandex');
+            document.querySelector('.map-container div[style*="dashed"] p').textContent = t('mapHint');
+            document.querySelector('.social-section h2').textContent = t('socials');
+            const hoursBlock = document.querySelector('div[style*="workingPulse"]')?.parentElement;
+            if (hoursBlock) {
+                hoursBlock.querySelector('h3').textContent = t('hoursTitle');
+                hoursBlock.querySelector('p').textContent = t('hoursDays');
+            }
+        }
+
         // Инициализация Telegram Web App
         window.Telegram.WebApp.ready();
         window.Telegram.WebApp.expand();
+        applyContactsTranslations();
         
         function goBack() {
             window.history.back();

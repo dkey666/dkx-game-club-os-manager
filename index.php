@@ -2,6 +2,111 @@
 require_once __DIR__ . '/config.php';
 $adminsJson = json_encode(Config::getAdmins());
 $dbFile = Config::get('DB_NAME', 'club.db');
+
+function normalizeAppLanguage(?string $language): string
+{
+    $value = strtolower(trim((string) $language));
+    if (str_starts_with($value, 'uz')) {
+        return 'uz';
+    }
+    if (str_starts_with($value, 'en')) {
+        return 'en';
+    }
+    return 'ru';
+}
+
+function detectRequestLanguage(): string
+{
+    if (!empty($_GET['lang'])) {
+        return normalizeAppLanguage((string) $_GET['lang']);
+    }
+
+    $path = $_SERVER['REQUEST_URI'] ?? '';
+    if (preg_match('#^/(uz|en)(/|$)#i', $path, $matches)) {
+        return normalizeAppLanguage($matches[1]);
+    }
+
+    return 'ru';
+}
+
+function appendLangToUrl(string $url, string $language): string
+{
+    $separator = str_contains($url, '?') ? '&' : '?';
+    return $url . $separator . 'lang=' . urlencode($language);
+}
+
+function appTranslations(): array
+{
+    return [
+        'ru' => [
+            'bot_open_webapp' => '🌐 Открыть веб-приложение',
+            'bot_welcome' => "🎮 {app} приветствует вас!\n\n🖥️ У нас 30 современных игровых ПК\n🎯 3 специализированных зала\n💰 Система баллов и бонусов\n📱 Удобное онлайн-бронирование\n\nНажмите кнопку ниже, чтобы открыть веб-приложение:",
+            'bot_referral_reward' => 'первого друга',
+            'bot_referral_reward_next' => 'нового друга',
+            'bot_referral_message' => "🎉 Поздравляем! Ваш друг присоединился к боту!\n\n💰 Вы получили {reward} сум за приглашение {rewardText}",
+            'bot_admin_panel' => '⚙️ Админ панель',
+            'bot_admin_computers' => '🖥️ Управление ПК',
+            'bot_admin_bookings' => '📝 Бронирования',
+            'bot_admin_users' => '👥 Пользователи',
+            'bot_admin_tasks' => '🎯 Задания',
+            'bot_admin_points' => '💰 Баллы',
+            'bot_admin_open' => '🌐 Открыть веб-админку',
+            'access_title' => 'Доступ ограничен',
+            'access_message' => "Это мини-приложение работает только через Telegram.<br>Для доступа откройте нашего бота в Telegram.",
+            'access_open_bot' => '📱 Открыть бота в Telegram',
+            'access_info' => 'Бронирование компьютеров • Система баллов • Задания',
+        ],
+        'uz' => [
+            'bot_open_webapp' => '🌐 Веб-иловани очиш',
+            'bot_welcome' => "🎮 {app} га хуш келибсиз!\n\n🖥️ Бизда 30 та замонавий ўйин компютерлар мавжуд\n🎯 3 та ихтисослаштирилган зал\n💰 Баллар ва бонуслар тизими\n📱 Қулай онлайн банд қилиш\n\nВеб-иловани очиш учун қуйидаги тугмани босинг:",
+            'bot_referral_reward' => 'биринчи дўстингиз',
+            'bot_referral_reward_next' => 'янги дўстингиз',
+            'bot_referral_message' => "🎉 Табриклаймиз! Дўстингиз ботга қўшилди!\n\n💰 Сиз {reward} сўм олдингиз {rewardText} таклифи учун",
+            'bot_admin_panel' => '⚙️ Админ панель',
+            'bot_admin_computers' => '🖥️ ПК бошқаруви',
+            'bot_admin_bookings' => '📝 Бронлар',
+            'bot_admin_users' => '👥 Фойдаланувчилар',
+            'bot_admin_tasks' => '🎯 Вазифалар',
+            'bot_admin_points' => '💰 Баллар',
+            'bot_admin_open' => '🌐 Веб-админ очиш',
+            'access_title' => 'Кириш чекланган',
+            'access_message' => "Бу мини-илова фақат Telegram орқали ишлайди.<br>Кириш учун ботимизни Telegram ичида очинг.",
+            'access_open_bot' => '📱 Telegram ботни очиш',
+            'access_info' => 'Компьютер брон қилиш • Баллар тизими • Вазифалар',
+        ],
+        'en' => [
+            'bot_open_webapp' => '🌐 Open Web App',
+            'bot_welcome' => "🎮 Welcome to {app}!\n\n🖥️ We have 30 modern gaming PCs\n🎯 3 specialized halls\n💰 Points and bonus system\n📱 Convenient online booking\n\nTap the button below to open the Web App:",
+            'bot_referral_reward' => 'your first friend',
+            'bot_referral_reward_next' => 'a new friend',
+            'bot_referral_message' => "🎉 Congratulations! Your friend joined the bot!\n\n💰 You received {reward} UZS for inviting {rewardText}",
+            'bot_admin_panel' => '⚙️ Admin Panel',
+            'bot_admin_computers' => '🖥️ PC Management',
+            'bot_admin_bookings' => '📝 Bookings',
+            'bot_admin_users' => '👥 Users',
+            'bot_admin_tasks' => '🎯 Tasks',
+            'bot_admin_points' => '💰 Points',
+            'bot_admin_open' => '🌐 Open Web Admin',
+            'access_title' => 'Access restricted',
+            'access_message' => "This mini app works only inside Telegram.<br>Open our bot in Telegram to continue.",
+            'access_open_bot' => '📱 Open the bot in Telegram',
+            'access_info' => 'PC booking • Points system • Tasks',
+        ],
+    ];
+}
+
+function appText(string $language, string $key, array $params = []): string
+{
+    $translations = appTranslations();
+    $text = $translations[$language][$key] ?? $translations['ru'][$key] ?? $key;
+    foreach ($params as $param => $value) {
+        $text = str_replace('{' . $param . '}', (string) $value, $text);
+    }
+    return $text;
+}
+
+$currentLanguage = detectRequestLanguage();
+
 function validateTelegramWebApp($initData, $botToken, $maxAge = 86400) {
     if (empty($initData)) {
         error_log("Empty initData from IP: " . ($_SERVER['REMOTE_ADDR'] ?? 'unknown'));
@@ -68,6 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['webhook'])) {
         $chatId = $update['message']['chat']['id'];
         $text = $update['message']['text'];
         $userId = $update['message']['from']['id'];
+        $telegramLanguage = normalizeAppLanguage($update['message']['from']['language_code'] ?? '');
         
         if ($text === '/start' || strpos($text, '/start ref_') === 0) {
             $db = new SQLite3($dbFile);
@@ -139,9 +245,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['webhook'])) {
                         
                         if ($result && $result['success']) {
                             // Уведомляем реферера
-                            $rewardText = $result['reward'] == 1000 ? 'первого друга' : 'нового друга';
-                            $referrerMessage = "🎉 Табриклаймиз! Дўстингиз ботга қўшилди!\n\n" .
-                                            "💰 Сиз {$result['reward']} сўм олдингиз $rewardText таклифи учун";
+                            $rewardText = $result['reward'] == 1000
+                                ? appText($telegramLanguage, 'bot_referral_reward')
+                                : appText($telegramLanguage, 'bot_referral_reward_next');
+                            $referrerMessage = appText($telegramLanguage, 'bot_referral_message', [
+                                'reward' => $result['reward'],
+                                'rewardText' => $rewardText,
+                            ]);
                             
                             $referrerUrl = $url = "https://api.telegram.org/bot" . BOT_TOKEN . "/sendMessage";
                             $referrerData = http_build_query([
@@ -165,16 +275,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['webhook'])) {
             
             $keyboard = [
                 'inline_keyboard' => [[
-                    ['text' => '🌐 Веб-иловани очиш', 'web_app' => ['url' => WEBAPP_URL]]
+                    ['text' => appText($telegramLanguage, 'bot_open_webapp'), 'web_app' => ['url' => appendLangToUrl(WEBAPP_URL, $telegramLanguage)]]
                 ]]
             ];
             
-            $welcomeText = "🎮 " . APP_SHORT_NAME . " га хуш келибсиз!\n\n" .
-                           "🖥️ Бизда 30 та замонавий ўйин компютерлар мавжуд\n" .
-                           "🎯 3 та ихтисослаштирилган зал\n" .
-                           "💰 Баллар ва бонуслар тизими\n" .
-                           "📱 Қулай онлайн банд қилиш\n\n" .
-                           "Веб-иловани очиш учун қуйидаги тугмани босинг:";
+            $welcomeText = appText($telegramLanguage, 'bot_welcome', [
+                'app' => APP_SHORT_NAME,
+            ]);
             
             // Отправляем сообщение
             $url = "https://api.telegram.org/bot" . BOT_TOKEN . "/sendMessage";
@@ -199,19 +306,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['webhook'])) {
         if ($text === '/admin' && in_array($userId, $ADMINS)) {
             $keyboard = [
                 'inline_keyboard' => [
-                    [['text' => '🖥️ ПК бошкаруви', 'callback_data' => 'admin_computers']],
-                    [['text' => '📝 Бронлар', 'callback_data' => 'admin_bookings']],
-                    [['text' => '👥 Фойдаланувчилар', 'callback_data' => 'admin_users']],
-                    [['text' => '🎯 Вазифалар', 'callback_data' => 'admin_tasks']],
-                    [['text' => '💰 Баллар', 'callback_data' => 'admin_points']],
-                    [['text' => '🌐 Веб-админ очиш', 'url' => ADMIN_PANEL_URL]]
+                    [['text' => appText($telegramLanguage, 'bot_admin_computers'), 'callback_data' => 'admin_computers']],
+                    [['text' => appText($telegramLanguage, 'bot_admin_bookings'), 'callback_data' => 'admin_bookings']],
+                    [['text' => appText($telegramLanguage, 'bot_admin_users'), 'callback_data' => 'admin_users']],
+                    [['text' => appText($telegramLanguage, 'bot_admin_tasks'), 'callback_data' => 'admin_tasks']],
+                    [['text' => appText($telegramLanguage, 'bot_admin_points'), 'callback_data' => 'admin_points']],
+                    [['text' => appText($telegramLanguage, 'bot_admin_open'), 'url' => appendLangToUrl(ADMIN_PANEL_URL, $telegramLanguage)]]
                 ]
             ];
             
             $url = "https://api.telegram.org/bot" . BOT_TOKEN . "/sendMessage";
             $data = http_build_query([
                 'chat_id' => $chatId,
-                'text' => '⚙️ Админ панель',
+                'text' => appText($telegramLanguage, 'bot_admin_panel'),
                 'reply_markup' => json_encode($keyboard)
             ]);
             
@@ -558,17 +665,14 @@ if (!$isTelegramAccess && !empty($userAgent)) {
 <body>
     <div class="container">
         <div class="icon">🚫</div>
-        <h1 class="title">Доступ ограничен</h1>
-        <p class="message">
-            Это мини-приложение работает только через Telegram.<br>
-            Для доступа откройте нашего бота в Telegram.
-        </p>
+        <h1 class="title"><?= htmlspecialchars(appText($currentLanguage, 'access_title'), ENT_QUOTES, 'UTF-8') ?></h1>
+        <p class="message"><?= appText($currentLanguage, 'access_message') ?></p>
         <a href="<?= htmlspecialchars(BOT_URL, ENT_QUOTES, 'UTF-8') ?>" class="telegram-link">
-            📱 Открыть бота в Telegram
+            <?= htmlspecialchars(appText($currentLanguage, 'access_open_bot'), ENT_QUOTES, 'UTF-8') ?>
         </a>
         <div class="info">
             🎮 <?= htmlspecialchars(APP_SHORT_NAME, ENT_QUOTES, 'UTF-8') ?><br>
-            Бронирование компьютеров • Система баллов • Задания
+            <?= htmlspecialchars(appText($currentLanguage, 'access_info'), ENT_QUOTES, 'UTF-8') ?>
         </div>
     </div>
 </body>
@@ -579,7 +683,7 @@ exit;
 // Если дошли до этой точки - доступ разрешен
 ?>
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="<?= htmlspecialchars($currentLanguage, ENT_QUOTES, 'UTF-8') ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -594,6 +698,7 @@ exit;
     ">
     <title>🎮 <?= htmlspecialchars(APP_SHORT_NAME, ENT_QUOTES, 'UTF-8') ?></title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="/scripts/i18n.js"></script>
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800;900&display=swap');
         * {
@@ -1490,6 +1595,7 @@ const ADMIN_IDS = <?php echo $adminsJson; ?>;
         <div class="lang-toggle">
             <button onclick="switchLanguage('ru')" class="lang-btn active" id="ru-btn">RU</button>
             <button onclick="switchLanguage('uz')" class="lang-btn" id="uz-btn">UZ</button>
+            <button onclick="switchLanguage('en')" class="lang-btn" id="en-btn">EN</button>
         </div>
     </div>
 
@@ -1588,6 +1694,129 @@ const ADMIN_IDS = <?php echo $adminsJson; ?>;
     </a>
 
     <script>
+        const mainTranslations = {
+            ru: {
+                subtitle: 'GAME CLUB',
+                hallsTitle: 'НАШИ ЗАЛЫ',
+                halls: [
+                    { title: '🎯 ЗАЛ 1 - ОНЛАЙН ИГРЫ', description: '10 мощных ПК для онлайн-игр: CS2, Valorant, Dota 2, LoL и др.' },
+                    { title: '⚔️ ЗАЛ 2 - СМЕШАННЫЙ', description: '5 ПК для онлайн-игр + 5 ПК для классического CS 1.6' },
+                    { title: '🎩 ЗАЛ 3 - ОФФЛАЙН', description: '10 ПК для оффлайн-игр и классических шутеров' }
+                ],
+                pricesTitle: '💰 ТАРИФЫ',
+                prices: [
+                    { time: '☀️ Дневной (09:00 - 19:00)', amount: '12 000 сум/час' },
+                    { time: '🌙 Вечерний (19:00 - 09:00)', amount: '14 000 сум/час' },
+                    { time: '🌃 Ночной пакет (00:00 - 07:00)', amount: '42 000 сум' }
+                ],
+                leaderboardTitle: '🏆 ТОП ПОЛЬЗОВАТЕЛЕЙ',
+                leaderboardLoading: '⏳ Загрузка...',
+                leaderboardMore: 'ПОКАЗАТЬ ЕЩЕ',
+                leaderboardEmpty: 'Пока нет данных',
+                leaderboardError: 'Ошибка загрузки',
+                contacts: '📞 КОНТАКТЫ',
+                book: 'ЗАБРОНИРОВАТЬ',
+                profile: 'Профиль',
+                admin: 'Админ',
+                welcome: 'Добро пожаловать!',
+                user: 'Пользователь',
+                currency: 'сум'
+            },
+            uz: {
+                subtitle: 'GAME CLUB',
+                hallsTitle: 'БИЗНИНГ ЗАЛЛАР',
+                halls: [
+                    { title: '🎯 ЗАЛ 1 - ОНЛАЙН ЎЙИНЛАР', description: 'CS2, Valorant, Dota 2, LoL ва бошқалар учун 10 та кучли ПК.' },
+                    { title: '⚔️ ЗАЛ 2 - АРАЛАШ', description: '5 та онлайн ПК + 5 та классик CS 1.6 ПК' },
+                    { title: '🎩 ЗАЛ 3 - ОФФЛАЙН', description: 'Оффлайн ўйинлар ва классик шутерлар учун 10 та ПК' }
+                ],
+                pricesTitle: '💰 ТАРИФЛАР',
+                prices: [
+                    { time: '☀️ Кундузги (09:00 - 19:00)', amount: '12 000 сўм/соат' },
+                    { time: '🌙 Кечки (19:00 - 09:00)', amount: '14 000 сўм/соат' },
+                    { time: '🌃 Тунги пакет (00:00 - 07:00)', amount: '42 000 сўм' }
+                ],
+                leaderboardTitle: '🏆 ТОП ФОЙДАЛАНУВЧИЛАР',
+                leaderboardLoading: '⏳ Юкланмоқда...',
+                leaderboardMore: 'ЯНА КЎРСАТИШ',
+                leaderboardEmpty: 'Ҳозирча маълумот йўқ',
+                leaderboardError: 'Юклаш хатоси',
+                contacts: '📞 КОНТАКТЛАР',
+                book: 'БРОН ҚИЛИШ',
+                profile: 'Профиль',
+                admin: 'Админ',
+                welcome: 'Хуш келибсиз!',
+                user: 'Фойдаланувчи',
+                currency: 'сўм'
+            },
+            en: {
+                subtitle: 'GAME CLUB',
+                hallsTitle: 'OUR HALLS',
+                halls: [
+                    { title: '🎯 HALL 1 - ONLINE GAMES', description: '10 high-performance PCs for CS2, Valorant, Dota 2, LoL, and more.' },
+                    { title: '⚔️ HALL 2 - MIXED', description: '5 online gaming PCs + 5 classic CS 1.6 PCs' },
+                    { title: '🎩 HALL 3 - OFFLINE', description: '10 PCs for offline games and classic shooters' }
+                ],
+                pricesTitle: '💰 PRICING',
+                prices: [
+                    { time: '☀️ Daytime (09:00 - 19:00)', amount: '12,000 UZS/hour' },
+                    { time: '🌙 Evening (19:00 - 09:00)', amount: '14,000 UZS/hour' },
+                    { time: '🌃 Night Pack (00:00 - 07:00)', amount: '42,000 UZS' }
+                ],
+                leaderboardTitle: '🏆 TOP PLAYERS',
+                leaderboardLoading: '⏳ Loading...',
+                leaderboardMore: 'SHOW MORE',
+                leaderboardEmpty: 'No data yet',
+                leaderboardError: 'Loading error',
+                contacts: '📞 CONTACTS',
+                book: 'BOOK NOW',
+                profile: 'Profile',
+                admin: 'Admin',
+                welcome: 'Welcome!',
+                user: 'User',
+                currency: 'UZS'
+            }
+        };
+        const t = DKXI18n.createTranslator(mainTranslations);
+
+        function applyMainTranslations() {
+            document.documentElement.lang = DKXI18n.getCurrentLanguage();
+            document.querySelector('.subtitle').textContent = t('subtitle');
+            document.querySelectorAll('.section-title')[0].textContent = t('hallsTitle');
+            document.querySelectorAll('.hall-card').forEach((card, index) => {
+                card.querySelector('.hall-title').textContent = t(`halls.${index}.title`);
+                card.querySelector('.hall-description').textContent = t(`halls.${index}.description`);
+            });
+            document.querySelectorAll('.section-title')[1].textContent = t('pricesTitle');
+            document.querySelectorAll('.price-card').forEach((card, index) => {
+                card.querySelector('.price-time').textContent = t(`prices.${index}.time`);
+                card.querySelector('.price-amount').textContent = t(`prices.${index}.amount`);
+            });
+            document.querySelector('.leaderboard-title').textContent = t('leaderboardTitle');
+            const leaderboardList = document.getElementById('leaderboardList');
+            if (leaderboardList && leaderboardList.textContent.includes('Загрузка')) {
+                leaderboardList.innerHTML = `<div style="text-align: center; color: rgba(255,255,255,0.5); padding: 20px;">${t('leaderboardLoading')}</div>`;
+            }
+            document.getElementById('showMoreBtn').textContent = t('leaderboardMore');
+            const contactsButton = document.querySelector('.contacts-btn');
+            if (contactsButton) {
+                contactsButton.textContent = t('contacts');
+                contactsButton.setAttribute('href', DKXI18n.withLanguage('contacts.html'));
+            }
+            const bookingButton = document.querySelector('.floating-book-btn');
+            if (bookingButton) {
+                bookingButton.textContent = t('book');
+                bookingButton.setAttribute('href', DKXI18n.withLanguage('booking.html'));
+            }
+            if (!user) {
+                document.getElementById('profileRankDisplay').textContent = t('profile');
+            }
+            const pointsButton = document.querySelector('.points-button');
+            if (pointsButton) {
+                pointsButton.innerHTML = `💎 <span id="pointsAmount">${document.getElementById('pointsAmount').textContent}</span> ${t('currency')}`;
+            }
+        }
+
         let user = null;
         let lastKnownBalance = 0;
         let leaderboardOffset = 0;
@@ -1692,18 +1921,22 @@ const ADMIN_IDS = <?php echo $adminsJson; ?>;
                         const profileDisplay = document.getElementById('profileRankDisplay');
                         if (profileDisplay) {
                             // Показываем имя пользователя, если есть, иначе "Профиль"
-                            const displayName = user.name || user.first_name || 'Профиль';
+                            const displayName = user.name || user.first_name || t('profile');
                             profileDisplay.textContent = displayName;
                         }
                         
-                        if (profileDisplay) profileDisplay.textContent = data.rank.name;
+                        if (profileDisplay) profileDisplay.textContent = DKXI18n.translateRankName(data.rank.name, data.rank.level);
                         if (profileIcon) {
                             profileIcon.src = `images/icons/${data.rank.icon}`;
                             profileIcon.style.display = 'inline-block'; // Показываем иконку
                         }
                     }
                 } else {
-                    document.getElementById('pointsAmount').textContent = 'Активировать';
+                    document.getElementById('pointsAmount').textContent = DKXI18n.getCurrentLanguage() === 'en'
+                        ? 'Activate'
+                        : DKXI18n.getCurrentLanguage() === 'uz'
+                            ? 'Фаоллаштириш'
+                            : 'Активировать';
                     document.querySelector('.points-button').style.background = 'linear-gradient(45deg, #28a745, #20c997)';
                 }
                 
@@ -1733,7 +1966,7 @@ const ADMIN_IDS = <?php echo $adminsJson; ?>;
                         const profileDisplay = document.getElementById('profileRankDisplay');
                         const profileIcon = document.getElementById('profileRankIcon');
                         
-                        if (profileDisplay) profileDisplay.textContent = rankData.rank.name;
+                        if (profileDisplay) profileDisplay.textContent = DKXI18n.translateRankName(rankData.rank.name, rankData.rank.level);
                         if (profileIcon) profileIcon.src = `images/icons/${rankData.rank.icon}`;
                     }
                 }
@@ -1803,22 +2036,22 @@ const ADMIN_IDS = <?php echo $adminsJson; ?>;
             } catch (error) {
                 const list = document.getElementById('leaderboardList');
                 if (list) {
-                    list.innerHTML = '<div style="text-align: center; color: #e74c3c;">Ошибка загрузки</div>';
+                    list.innerHTML = `<div style="text-align: center; color: #e74c3c;">${t('leaderboardError')}</div>`;
                 }
             }
         }
         
         function getRankByPoints(points) {
-            if (points >= 1000000) return { name: 'Властелин Арены', icon: 'arena_lord.png', level: 10 };
-            if (points >= 600000) return { name: 'Легенда', icon: 'legend.png', level: 9 };
-            if (points >= 300000) return { name: 'Чемпион II', icon: 'champion2.png', level: 8 };
-            if (points >= 150000) return { name: 'Чемпион I', icon: 'champion1.png', level: 7 };
-            if (points >= 80000) return { name: 'Воин III', icon: 'warrior3.png', level: 6 };
-            if (points >= 40000) return { name: 'Воин II', icon: 'warrior2.png', level: 5 };
-            if (points >= 20000) return { name: 'Воин I', icon: 'warrior1.png', level: 4 };
-            if (points >= 10000) return { name: 'Страж II', icon: 'guard2.png', level: 3 };
-            if (points >= 5000) return { name: 'Страж I', icon: 'guard1.png', level: 2 };
-            return { name: 'Новичок I', icon: 'novice.png', level: 1 };
+            if (points >= 1000000) return { name: DKXI18n.translateRankName('', 10), icon: 'arena_lord.png', level: 10 };
+            if (points >= 600000) return { name: DKXI18n.translateRankName('', 9), icon: 'legend.png', level: 9 };
+            if (points >= 300000) return { name: DKXI18n.translateRankName('', 8), icon: 'champion2.png', level: 8 };
+            if (points >= 150000) return { name: DKXI18n.translateRankName('', 7), icon: 'champion1.png', level: 7 };
+            if (points >= 80000) return { name: DKXI18n.translateRankName('', 6), icon: 'warrior3.png', level: 6 };
+            if (points >= 40000) return { name: DKXI18n.translateRankName('', 5), icon: 'warrior2.png', level: 5 };
+            if (points >= 20000) return { name: DKXI18n.translateRankName('', 4), icon: 'warrior1.png', level: 4 };
+            if (points >= 10000) return { name: DKXI18n.translateRankName('', 3), icon: 'guard2.png', level: 3 };
+            if (points >= 5000) return { name: DKXI18n.translateRankName('', 2), icon: 'guard1.png', level: 2 };
+            return { name: DKXI18n.translateRankName('', 1), icon: 'novice.png', level: 1 };
         }
         
         
@@ -1827,7 +2060,7 @@ const ADMIN_IDS = <?php echo $adminsJson; ?>;
             if (!list) return;
             
             if (!leaderboardData || leaderboardData.length === 0) {
-                list.innerHTML = '<div style="text-align: center; color: #a0a0a0; padding: 20px;">Пока нет данных</div>';
+                list.innerHTML = `<div style="text-align: center; color: #a0a0a0; padding: 20px;">${t('leaderboardEmpty')}</div>`;
                 return;
             }
             
@@ -1846,8 +2079,8 @@ const ADMIN_IDS = <?php echo $adminsJson; ?>;
                     <div class="leader-item ${rankClass}">
                         <div class="leader-rank">${rank}</div>
                         <img src="images/icons/${userRank.icon}" alt="${userRank.name}" style="width: 32px; height: 32px; flex-shrink: 0; border-radius: 50%; box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);" onerror="this.style.display='none'">
-                        <div class="leader-name">${escapeHtml(leader.name || 'Пользователь')}</div>
-                        <div class="leader-points">${(leader.points || 0).toLocaleString()} сум</div>
+                        <div class="leader-name">${escapeHtml(leader.name || t('user'))}</div>
+                        <div class="leader-points">${(leader.points || 0).toLocaleString()} ${t('currency')}</div>
                     </div>
                 `;
             }).join('');
@@ -2031,7 +2264,13 @@ const ADMIN_IDS = <?php echo $adminsJson; ?>;
             if (!container) return;
             
             if (userNotifications.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">Нет уведомлений</p>';
+                container.innerHTML = `<p style="text-align: center; color: #666; padding: 20px;">${
+                    DKXI18n.getCurrentLanguage() === 'en'
+                        ? 'No notifications'
+                        : DKXI18n.getCurrentLanguage() === 'uz'
+                            ? 'Билдиришномалар йўқ'
+                            : 'Нет уведомлений'
+                }</p>`;
                 return;
             }
             
@@ -2079,19 +2318,19 @@ const ADMIN_IDS = <?php echo $adminsJson; ?>;
         
         // Основные функции
         function openPoints() {
-            window.location.href = 'points.html';
+            DKXI18n.navigate('points.html');
         }
         
         function openProfile() {
-            window.location.href = 'profile.html';
+            DKXI18n.navigate('profile.html');
         }
         
         function checkAdminRights() {
             if (tgUser && ADMIN_IDS.includes(tgUser.id)) {
                 const adminBtn = document.createElement('button');
                 adminBtn.className = 'admin-button';
-                adminBtn.textContent = 'Админ';
-                adminBtn.onclick = () => window.location.href = 'new.html';
+                adminBtn.textContent = t('admin');
+                adminBtn.onclick = () => DKXI18n.navigate('new.html');
                 document.body.appendChild(adminBtn);
             }
         }
@@ -2176,13 +2415,16 @@ const ADMIN_IDS = <?php echo $adminsJson; ?>;
             if (lang === 'ru') {
                 document.getElementById('ru-btn')?.classList.add('active');
                 langToggle?.setAttribute('data-active', 'ru');
-            } else {
+            } else if (lang === 'uz') {
                 document.getElementById('uz-btn')?.classList.add('active');
                 langToggle?.setAttribute('data-active', 'uz');
+            } else {
+                document.getElementById('en-btn')?.classList.add('active');
+                langToggle?.setAttribute('data-active', 'en');
             }
             
             setTimeout(() => {
-                window.location.href = lang === 'uz' ? '/uz/' : '/';
+                DKXI18n.switchLanguage(lang);
             }, 400);
         }
         
@@ -2217,19 +2459,28 @@ const ADMIN_IDS = <?php echo $adminsJson; ?>;
         document.addEventListener('DOMContentLoaded', function() {
             // Языковой переключатель
             const langToggle = document.querySelector('.lang-toggle');
-            const currentPath = window.location.pathname;
+            const currentLanguage = DKXI18n.getCurrentLanguage();
             
             if (langToggle) {
-                if (currentPath.includes('/uz/')) {
+                if (currentLanguage === 'uz') {
                     langToggle.setAttribute('data-active', 'uz');
                     document.getElementById('uz-btn')?.classList.add('active');
                     document.getElementById('ru-btn')?.classList.remove('active');
+                    document.getElementById('en-btn')?.classList.remove('active');
+                } else if (currentLanguage === 'en') {
+                    langToggle.setAttribute('data-active', 'en');
+                    document.getElementById('en-btn')?.classList.add('active');
+                    document.getElementById('ru-btn')?.classList.remove('active');
+                    document.getElementById('uz-btn')?.classList.remove('active');
                 } else {
                     langToggle.setAttribute('data-active', 'ru');
                     document.getElementById('ru-btn')?.classList.add('active');
                     document.getElementById('uz-btn')?.classList.remove('active');
+                    document.getElementById('en-btn')?.classList.remove('active');
                 }
             }
+
+            applyMainTranslations();
             
             // Инициализация уведомлений
             loadUserNotifications();
@@ -2250,7 +2501,7 @@ const ADMIN_IDS = <?php echo $adminsJson; ?>;
             setTimeout(() => {
                 const isFirstTime = !localStorage.getItem('userNotifications');
                 if (isFirstTime) {
-                    addUserNotification('welcome', 'Добро пожаловать!');
+                    addUserNotification('welcome', t('welcome'));
                 }
             }, 3000);
             setTimeout(() => loadLeaderboard(), 1000);

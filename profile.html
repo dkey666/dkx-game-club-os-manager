@@ -14,6 +14,7 @@
     ">
     <title>Profile - DKX Game Club</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="/scripts/i18n.js"></script>
     <link rel="stylesheet" href="styles/rank-enhancements.css">
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800;900&display=swap');
@@ -1092,6 +1093,178 @@
     </div>
     
     <script>
+        const profileTranslations = {
+            ru: {
+                pageTitle: 'Profile - DKX Game Club',
+                back: 'Назад',
+                unavailableTitle: 'Профиль недоступен',
+                unavailableText: 'Для создания профиля активируйте систему баллов на главной странице',
+                player: 'Игрок',
+                balance: 'сум',
+                rankProgress: '{amount} сум заработано',
+                rankSystem: 'Система рангов',
+                rankSystemHint: 'Ранг рассчитывается по всем заработанным баллам за время',
+                rankLoading: 'Загрузка рангов...',
+                tabs: { stats: '📊 Статистика', profile: '👤 Профиль', history: '📈 История' },
+                earningsTitle: '💰 Заработок',
+                totalEarned: 'Всего заработано',
+                todayEarned: 'За сегодня',
+                clicksEarned: 'Из кликов',
+                tasksEarned: 'Из заданий',
+                referralEarned: 'Из рефералов',
+                personalTitle: '🔧 Персональные данные',
+                infoTitle: 'ℹ️ Информация',
+                historyTitle: '📋 История',
+                name: 'Имя',
+                phone: 'Телефон',
+                email: 'Email',
+                username: 'Username',
+                notSet: 'Не указан',
+                registeredAt: 'Дата регистрации',
+                status: 'Статус',
+                active: 'Активен',
+                historyLoading: 'Загрузка...',
+                historyEmpty: 'История операций пуста',
+                historyError: 'Ошибка загрузки истории',
+                ranksError: 'Ошибка загрузки ранга',
+                emailAdd: 'Добавьте email и получите +500 сум',
+                emailConfirm: 'Подтвердите {email} и получите +500 сум',
+                emailMissing: 'Email не указан',
+                emailUnverified: 'Email не подтвержден',
+                emailPrompt: 'Введите ваш email для получения кода',
+                emailInvalid: 'Введите корректный email',
+                emailLong: 'Email слишком длинный (макс 100 символов)',
+                emailSending: 'Отправляем...',
+                emailSent: 'Код отправлен на {email}',
+                emailSendError: 'Ошибка отправки',
+                emailCodeInvalid: 'Введите корректный 6-значный код (только цифры)',
+                emailVerified: 'Email подтвержден! +500 сум начислено',
+                invalidCode: 'Неверный код',
+                genericError: 'Ошибка',
+                modalTitle: '📧 Подтверждение email',
+                modalSend: 'Отправить код',
+                modalVerify: 'Подтвердить',
+                modalClose: 'Закрыть',
+                modalPlaceholderEmail: 'Введите email',
+                modalPlaceholderCode: 'Введите код (6 цифр)',
+                currentRank: '👑 АКТИВЕН',
+                currentRankRange: 'Ваш текущий ранг • {amount} сум'
+            },
+            uz: {
+                pageTitle: 'Profil - DKX Game Club',
+                back: 'Орқага',
+                unavailableTitle: 'Профиль мавжуд эмас',
+                unavailableText: 'Профиль яратиш учун бош саҳифада баллар тизимини фаоллаштиринг',
+                player: 'Ўйинчи',
+                balance: 'сўм',
+                rankProgress: '{amount} сўм топилди',
+                rankSystem: 'Даражалар тизими',
+                rankSystemHint: 'Даража вақт давомида топилган барча баллар бўйича ҳисобланади',
+                rankLoading: 'Даражалар юкланмоқда...',
+                tabs: { stats: '📊 Статистика', profile: '👤 Ҳисоб', history: '📈 Тарих' },
+                earningsTitle: '💰 Даромад',
+                totalEarned: 'Жами топилган',
+                todayEarned: 'Бугун',
+                clicksEarned: 'Кликдан',
+                tasksEarned: 'Вазифалардан',
+                referralEarned: 'Рефералдан',
+                personalTitle: '🔧 Шахсий маълумотлар',
+                infoTitle: 'ℹ️ Маълумот',
+                historyTitle: '📋 Тарих',
+                name: 'Исм',
+                phone: 'Телефон',
+                email: 'Email',
+                username: 'Username',
+                notSet: 'Кўрсатилмаган',
+                registeredAt: 'Рўйхатдан ўтган сана',
+                status: 'Ҳолат',
+                active: 'Фаол',
+                historyLoading: 'Юкланмоқда...',
+                historyEmpty: 'Операциялар тарихи бўш',
+                historyError: 'Тарихни юклашда хатолик',
+                ranksError: 'Даражани юклашда хатолик',
+                emailAdd: 'Email қўшинг ва +500 сўм олинг',
+                emailConfirm: '{email} ни тасдиқланг ва +500 сўм олинг',
+                emailMissing: 'Email киритилмаган',
+                emailUnverified: 'Email тасдиқланмаган',
+                emailPrompt: 'Кодни олиш учун emailingизни киритинг',
+                emailInvalid: 'Тўғри email киритинг',
+                emailLong: 'Email жуда узун',
+                emailSending: 'Юборилмоқда...',
+                emailSent: 'Код {email} манзилига юборилди',
+                emailSendError: 'Юборишда хато',
+                emailCodeInvalid: '6 рақамли тўғри кодни киритинг',
+                emailVerified: 'Email тасдиқланди! +500 сўм қўшилди',
+                invalidCode: 'Нотўғри код',
+                genericError: 'Хато',
+                modalTitle: '📧 Email тасдиқлаш',
+                modalSend: 'Кодни юбориш',
+                modalVerify: 'Тасдиқлаш',
+                modalClose: 'Ёпиш',
+                modalPlaceholderEmail: 'Email киритинг',
+                modalPlaceholderCode: 'Кодни киритинг (6 рақам)',
+                currentRank: '👑 ФАОЛ',
+                currentRankRange: 'Жорий даражангиз • {amount} сўм'
+            },
+            en: {
+                pageTitle: 'Profile - DKX Game Club',
+                back: 'Back',
+                unavailableTitle: 'Profile unavailable',
+                unavailableText: 'Activate the points system on the main page to create your profile',
+                player: 'Player',
+                balance: 'UZS',
+                rankProgress: '{amount} UZS earned',
+                rankSystem: 'Rank system',
+                rankSystemHint: 'Your rank is based on all points earned over time',
+                rankLoading: 'Loading ranks...',
+                tabs: { stats: '📊 Stats', profile: '👤 Profile', history: '📈 History' },
+                earningsTitle: '💰 Earnings',
+                totalEarned: 'Total earned',
+                todayEarned: 'Today',
+                clicksEarned: 'From clicks',
+                tasksEarned: 'From tasks',
+                referralEarned: 'From referrals',
+                personalTitle: '🔧 Personal details',
+                infoTitle: 'ℹ️ Information',
+                historyTitle: '📋 History',
+                name: 'Name',
+                phone: 'Phone',
+                email: 'Email',
+                username: 'Username',
+                notSet: 'Not set',
+                registeredAt: 'Registered at',
+                status: 'Status',
+                active: 'Active',
+                historyLoading: 'Loading...',
+                historyEmpty: 'No activity history yet',
+                historyError: 'Failed to load history',
+                ranksError: 'Failed to load rank',
+                emailAdd: 'Add an email and get +500 UZS',
+                emailConfirm: 'Verify {email} and get +500 UZS',
+                emailMissing: 'Email missing',
+                emailUnverified: 'Email not verified',
+                emailPrompt: 'Enter your email to get the code',
+                emailInvalid: 'Enter a valid email',
+                emailLong: 'Email is too long',
+                emailSending: 'Sending...',
+                emailSent: 'Code sent to {email}',
+                emailSendError: 'Sending error',
+                emailCodeInvalid: 'Enter a valid 6-digit code',
+                emailVerified: 'Email verified! +500 UZS added',
+                invalidCode: 'Invalid code',
+                genericError: 'Error',
+                modalTitle: '📧 Email verification',
+                modalSend: 'Send code',
+                modalVerify: 'Verify',
+                modalClose: 'Close',
+                modalPlaceholderEmail: 'Enter email',
+                modalPlaceholderCode: 'Enter code (6 digits)',
+                currentRank: '👑 ACTIVE',
+                currentRankRange: 'Your current rank • {amount} UZS'
+            }
+        };
+        const t = DKXI18n.createTranslator(profileTranslations);
+
         const escapeHtml = (text) => {
             const div = document.createElement('div');
             div.textContent = text;
@@ -1123,6 +1296,29 @@
         } else {
             console.error('No TG user!');
         }
+        
+        document.addEventListener('DOMContentLoaded', function () {
+            document.title = t('pageTitle');
+            document.documentElement.lang = DKXI18n.getCurrentLanguage();
+            document.querySelector('.back-btn').textContent = `← ${t('back')}`;
+            const noData = document.querySelector('#profileContent .no-data');
+            if (noData) {
+                noData.querySelector('h3').textContent = t('unavailableTitle');
+                noData.querySelector('p').textContent = t('unavailableText');
+            }
+            const emailModalTitle = document.getElementById('emailModalTitle');
+            if (emailModalTitle) emailModalTitle.textContent = t('modalTitle');
+            const emailInput = document.getElementById('emailInput');
+            if (emailInput) emailInput.placeholder = t('modalPlaceholderEmail');
+            const codeInput = document.getElementById('codeInput');
+            if (codeInput) codeInput.placeholder = t('modalPlaceholderCode');
+            const sendBtn = document.getElementById('sendBtn');
+            if (sendBtn) sendBtn.textContent = t('modalSend');
+            const verifyBtn = document.getElementById('verifyBtn');
+            if (verifyBtn) verifyBtn.textContent = t('modalVerify');
+            const closeBtn = document.getElementById('closeEmailBtn');
+            if (closeBtn) closeBtn.textContent = t('modalClose');
+        });
         
         async function loadProfile() {
             console.log('=== LOAD PROFILE START ===');
@@ -1172,20 +1368,20 @@
                 <div class="profile-header">
                     <div class="profile-avatar">🎮</div>
                     <div class="profile-info">
-                        <div class="profile-name">${escapeHtml(user.name || user.first_name || 'Игрок')}</div>
+                        <div class="profile-name">${escapeHtml(user.name || user.first_name || t('player'))}</div>
                         <div class="profile-id">ID: ${escapeHtml(user.telegram_id)}</div>
                     </div>
                     <div class="profile-balance">
                         <div class="balance-amount">${(user.points || 0).toLocaleString()}</div>
-                        <div class="balance-label">сум</div>
+                        <div class="balance-label">${t('balance')}</div>
                     </div>
                 </div>
                 
                 <div class="profile-rank">
                     <img id="rankIcon" src="images/icons/novice.png" alt="Ранг" />
                     <div class="rank-info">
-                        <div class="rank-name" id="rankName">Новичок I</div>
-                        <div class="rank-progress" id="rankProgress">0 сум заработано</div>
+                        <div class="rank-name" id="rankName">${DKXI18n.translateRankName('', 1)}</div>
+                        <div class="rank-progress" id="rankProgress">${t('rankProgress', { amount: 0 })}</div>
                     </div>
                     <div class="rank-click-hint">ⓘ</div>
                 </div>
@@ -1194,14 +1390,14 @@
                     <div class="rank-modal-content">
                         <button class="rank-modal-close" onclick="closeRankModal()">✕</button>
                         <div class="rank-modal-header">
-                            <h3>Система рангов</h3>
+                            <h3>${t('rankSystem')}</h3>
                         </div>
                         <div class="rank-modal-body">
                             <div class="rank-modal-info">
-                                Ранг рассчитывается по всем заработанным баллам за время
+                                ${t('rankSystemHint')}
                             </div>
                             <div id="ranksList" class="ranks-list">
-                                Загрузка рангов...
+                                ${t('rankLoading')}
                             </div>
                         </div>
                     </div>
@@ -1209,36 +1405,36 @@
             
                 <div class="tabs-container">
                     <div class="tabs-nav">
-                        <button class="tab-btn active" onclick="switchTab('stats', this)">📊 Статистика</button>
-                        <button class="tab-btn" onclick="switchTab('profile', this)">👤 Профиль</button>
-                        <button class="tab-btn" onclick="switchTab('history', this)">📈 История</button>
+                        <button class="tab-btn active" onclick="switchTab('stats', this)">${t('tabs.stats')}</button>
+                        <button class="tab-btn" onclick="switchTab('profile', this)">${t('tabs.profile')}</button>
+                        <button class="tab-btn" onclick="switchTab('history', this)">${t('tabs.history')}</button>
                     </div>
             
                     <div id="stats-tab" class="tab-content active">
                         <div class="info-card">
                             <div class="card-header">
-                                <div class="card-title">💰 Заработок</div>
+                                <div class="card-title">${t('earningsTitle')}</div>
                             </div>
                             <div class="stats-grid" style="margin-top: 16px;">
                                 <div class="stat-card">
                                     <div class="stat-number">${earningsData.totalEarned.toLocaleString()}</div>
-                                    <div class="stat-label">Всего заработано</div>
+                                    <div class="stat-label">${t('totalEarned')}</div>
                                 </div>
                                 <div class="stat-card">
                                     <div class="stat-number">${earningsData.todayEarned.toLocaleString()}</div>
-                                    <div class="stat-label">За сегодня</div>
+                                    <div class="stat-label">${t('todayEarned')}</div>
                                 </div>
                                 <div class="stat-card">
                                     <div class="stat-number">${earningsData.clicksEarned.toLocaleString()}</div>
-                                    <div class="stat-label">Из кликов</div>
+                                    <div class="stat-label">${t('clicksEarned')}</div>
                                 </div>
                                 <div class="stat-card">
                                     <div class="stat-number">${earningsData.tasksEarned.toLocaleString()}</div>
-                                    <div class="stat-label">Из заданий</div>
+                                    <div class="stat-label">${t('tasksEarned')}</div>
                                 </div>
                                 <div class="stat-card">
                                     <div class="stat-number">${earningsData.referralEarned.toLocaleString()}</div>
-                                    <div class="stat-label">Из рефералов</div>
+                                    <div class="stat-label">${t('referralEarned')}</div>
                                 </div>
                             </div>
                         </div>
@@ -1247,37 +1443,37 @@
                     <div id="profile-tab" class="tab-content">
                         <div class="info-card">
                             <div class="card-header">
-                                <div class="card-title">🔧 Персональные данные</div>
+                                <div class="card-title">${t('personalTitle')}</div>
                             </div>
                             <div class="info-row">
-                                <span class="info-label">Имя</span>
-                                <span class="info-value">${escapeHtml(user.name || 'Не указано')}</span>
+                                <span class="info-label">${t('name')}</span>
+                                <span class="info-value">${escapeHtml(user.name || t('notSet'))}</span>
                             </div>
                             <div class="info-row">
-                                <span class="info-label">Телефон</span>
-                                <span class="info-value">${escapeHtml(user.phone || 'Не указан')}</span>
+                                <span class="info-label">${t('phone')}</span>
+                                <span class="info-value">${escapeHtml(user.phone || t('notSet'))}</span>
                             </div>
                             <div class="info-row">
-                                <span class="info-label">Email</span>
-                                <span class="info-value">${escapeHtml(user.email || 'Не указан')} ${user.email_verified == 1 ? '✓' : ''}</span>
+                                <span class="info-label">${t('email')}</span>
+                                <span class="info-value">${escapeHtml(user.email || t('notSet'))} ${user.email_verified == 1 ? '✓' : ''}</span>
                             </div>
                             <div class="info-row">
-                                <span class="info-label">Username</span>
-                                <span class="info-value">${user.username ? '@' + escapeHtml(user.username) : 'Не указан'}</span>
+                                <span class="info-label">${t('username')}</span>
+                                <span class="info-value">${user.username ? '@' + escapeHtml(user.username) : t('notSet')}</span>
                             </div>
                         </div>
             
                         <div class="info-card">
                             <div class="card-header">
-                                <div class="card-title">ℹ️ Информация</div>
+                                <div class="card-title">${t('infoTitle')}</div>
                             </div>
                             <div class="info-row">
-                                <span class="info-label">Дата регистрации</span>
-                                <span class="info-value">${new Date(user.created_at).toLocaleDateString('ru-RU')}</span>
+                                <span class="info-label">${t('registeredAt')}</span>
+                                <span class="info-value">${DKXI18n.formatDate(user.created_at)}</span>
                             </div>
                             <div class="info-row">
-                                <span class="info-label">Статус</span>
-                                <span class="info-value">Активен</span>
+                                <span class="info-label">${t('status')}</span>
+                                <span class="info-value">${t('active')}</span>
                             </div>
                         </div>
                     </div>
@@ -1285,11 +1481,11 @@
                     <div id="history-tab" class="tab-content">
                         <div class="info-card">
                             <div class="card-header">
-                                <div class="card-title">📋 История</div>
+                                <div class="card-title">${t('historyTitle')}</div>
                             </div>
                             <div id="historyList" style="padding: 0 20px 20px; margin-top: 16px;">
                                 <div style="text-align: center; color: #a0a0a0; padding: 20px;">
-                                    Загрузка...
+                                    ${t('historyLoading')}
                                 </div>
                             </div>
                         </div>
@@ -1345,7 +1541,7 @@
                     console.error('Ошибка загрузки fallback истории:', fallbackError);
                     const historyList = document.getElementById('historyList');
                     if (historyList) {
-                        historyList.innerHTML = '<div class="no-data"><p>Ошибка загрузки истории</p></div>';
+                        historyList.innerHTML = `<div class="no-data"><p>${t('historyError')}</p></div>`;
                     }
                 }
             }
@@ -1378,12 +1574,12 @@
             const historyList = document.getElementById('historyList');
             
             if (history.length === 0) {
-                historyList.innerHTML = '<div class="no-data"><p>История операций пуста</p></div>';
+                historyList.innerHTML = `<div class="no-data"><p>${t('historyEmpty')}</p></div>`;
                 return;
             }
             
             historyList.innerHTML = history.slice(0, 15).map(item => {
-                const date = new Date(item.created_at).toLocaleDateString('ru-RU', {
+                const date = DKXI18n.formatDateTime(item.created_at, {
                     day: '2-digit',
                     month: '2-digit',
                     year: 'numeric',
@@ -1399,7 +1595,7 @@
                             <div class="history-date">${date}</div>
                         </div>
                         <div class="history-amount ${isPositive ? 'positive' : 'negative'}">
-                            ${isPositive ? '+' : '-'}${parseInt(item.amount).toLocaleString()} сум
+                            ${isPositive ? '+' : '-'}${parseInt(item.amount).toLocaleString()} ${t('balance')}
                         </div>
                     </div>
                 `;
@@ -1432,8 +1628,8 @@
                 const rankProgress = document.getElementById('rankProgress');
                 
                 if (rankIcon) rankIcon.src = `images/icons/${data.rank.icon}`;
-                if (rankName) rankName.textContent = data.rank.name;
-                if (rankProgress) rankProgress.textContent = `${data.totalEarned.toLocaleString()} сум заработано`;
+                if (rankName) rankName.textContent = DKXI18n.translateRankName(data.rank.name, data.rank.level);
+                if (rankProgress) rankProgress.textContent = t('rankProgress', { amount: data.totalEarned.toLocaleString() });
                 if (data && data.rank && data.rank.level) {
                     document.body.setAttribute('data-rank', data.rank.level);
                     console.log(`✅ Ранг применён: ${data.rank.name} (уровень ${data.rank.level})`);
@@ -1444,13 +1640,13 @@
                 console.log(`Ранг обновлен: ${data.rank.name} (уровень ${data.rank.level})`);
                 
                 if (debugInfo) {
-                    debugInfo.textContent = `Ранг загружен: ${data.rank.name}`;
+                    debugInfo.textContent = `${t('rankSystem')}: ${DKXI18n.translateRankName(data.rank.name, data.rank.level)}`;
                     setTimeout(() => debugInfo.style.display = 'none', 3000);
                 }
                 
             } catch (error) {
                 if (debugInfo) {
-                    debugInfo.textContent = 'Ошибка загрузки ранга';
+                    debugInfo.textContent = t('ranksError');
                     debugInfo.style.color = 'red';
                 }
             }
@@ -1516,7 +1712,7 @@
             if (!container) return;
             
             if (!allRanks || allRanks.length === 0) {
-                container.innerHTML = '<p style="color: #a0a0a0; text-align: center;">Ранги не загружены</p>';
+                container.innerHTML = `<p style="color: #a0a0a0; text-align: center;">${t('ranksError')}</p>`;
                 return;
             }
             
@@ -1529,8 +1725,8 @@
                     <div class="rank-item current-rank" style="margin-bottom: 24px;">
                         <img src="images/icons/${rank.icon}" onerror="this.style.display='none'" />
                         <div class="rank-item-info">
-                            <div class="rank-item-name">${rank.name}</div>
-                            <div class="rank-item-range" style="color: #e0e0e0; font-weight: 500;">Ваш текущий ранг • ${currentUserRank.totalEarned.toLocaleString()} сум</div>
+                            <div class="rank-item-name">${DKXI18n.translateRankName(rank.name, rank.level)}</div>
+                            <div class="rank-item-range" style="color: #e0e0e0; font-weight: 500;">${t('currentRankRange', { amount: currentUserRank.totalEarned.toLocaleString() })}</div>
                         </div>
                         <div style="
                             position: absolute; 
@@ -1549,7 +1745,7 @@
                             text-transform: uppercase;
                             letter-spacing: 0.5px;
                             text-shadow: 0 0 10px rgba(0, 240, 255, 0.8);
-                        ">👑 АКТИВЕН</div>
+                        ">${t('currentRank')}</div>
                     </div>
                 `;
             }
@@ -1562,8 +1758,8 @@
                     <div class="rank-item">
                         <img src="images/icons/${rank.icon}" style="width: 32px; height: 32px;" onerror="this.style.display='none'" />
                         <div class="rank-item-info">
-                            <div class="rank-item-name">${rank.name}</div>
-                            <div class="rank-item-range">${rank.range}</div>
+                            <div class="rank-item-name">${DKXI18n.translateRankName(rank.name, rank.level)}</div>
+                            <div class="rank-item-range">${DKXI18n.translateRankRange(rank.level)}</div>
                         </div>
                     </div>
                 `;
@@ -1593,8 +1789,8 @@
                         const rankProgress = document.getElementById('rankProgress');
                         
                         if (rankIcon) rankIcon.src = `images/icons/${data.rank.icon}`;
-                        if (rankName) rankName.textContent = data.rank.name;
-                        if (rankProgress) rankProgress.textContent = `${data.totalEarned.toLocaleString()} сум заработано`;
+                        if (rankName) rankName.textContent = DKXI18n.translateRankName(data.rank.name, data.rank.level);
+                        if (rankProgress) rankProgress.textContent = t('rankProgress', { amount: data.totalEarned.toLocaleString() });
                     }
                 }
             } catch (error) {
@@ -1649,14 +1845,14 @@
                 
                 if (!data.hasEmail || (data.hasEmail && !data.verified)) {
                     const message = !data.hasEmail 
-                        ? 'Добавьте email и получите +500 сум'
-                        : `Подтвердите ${data.email} и получите +500 сум`;
+                        ? t('emailAdd')
+                        : t('emailConfirm', { email: data.email });
                     emailBlock.innerHTML = `
                         <div style="background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 152, 0, 0.1)); border: 2px solid rgba(255, 193, 7, 0.4); border-radius: 20px; padding: 20px; margin-bottom: 20px; cursor: pointer;" onclick="openEmailModal()">
                             <div style="display: flex; align-items: center; gap: 15px;">
                                 <div style="font-size: 2rem;">📧</div>
                                 <div style="flex: 1;">
-                                    <div style="font-weight: 700; color: #ffc107; font-size: 1.1rem; margin-bottom: 5px;">Email ${!data.hasEmail ? 'не указан' : 'не подтвержден'}</div>
+                                    <div style="font-weight: 700; color: #ffc107; font-size: 1.1rem; margin-bottom: 5px;">Email ${!data.hasEmail ? t('emailMissing') : t('emailUnverified')}</div>
                                     <div style="color: var(--text-secondary); font-size: 0.9rem;">${message}</div>
                                 </div>
                                 <div style="color: #ffc107; font-size: 1.5rem;">→</div>
@@ -1673,7 +1869,7 @@
         
         function openEmailModal() {
             document.getElementById('emailModal').style.display = 'flex';
-            document.getElementById('emailText').textContent = 'Введите ваш email для получения кода';
+            document.getElementById('emailText').textContent = t('emailPrompt');
         }
         
         function closeEmailModal() {
@@ -1690,19 +1886,19 @@
             const email = escapeHtml(emailInput.value.trim());
             
             if (!email || !isValidEmail(email)) {
-                alert('Введите корректный email');
+                alert(t('emailInvalid'));
                 return;
             }
             
             if (email.length > 100) {
-                alert('Email слишком длинный (макс 100 символов)');
+                alert(t('emailLong'));
                 return;
             }
             
             currentEmail = email;
             const btn = document.getElementById('sendBtn');
             btn.disabled = true;
-            btn.textContent = 'Отправляем...';
+            btn.textContent = t('emailSending');
             
             try {
                 await fetch('api.php?action=update_user_email', {
@@ -1715,19 +1911,19 @@
                 const result = await response.json();
                 
                 if (result.success) {
-                    alert('Код отправлен на ' + email);
+                    alert(t('emailSent', { email }));
                     document.getElementById('emailInput').style.display = 'none';
                     document.getElementById('codeInput').style.display = 'block';
                     document.getElementById('sendBtn').style.display = 'none';
                     document.getElementById('verifyBtn').style.display = 'block';
                 } else {
-                    alert(result.message || 'Ошибка отправки');
+                    alert(result.message || t('emailSendError'));
                 }
             } catch (error) {
-                alert('Ошибка отправки');
+                alert(t('emailSendError'));
             } finally {
                 btn.disabled = false;
-                btn.textContent = 'Отправить код';
+                btn.textContent = t('modalSend');
             }
         }
         
@@ -1737,7 +1933,7 @@
             
             // Валидация: только цифры, ровно 6 символов
             if (!code || code.length !== 6 || !/^\d{6}$/.test(code)) {
-                alert('Введите корректный 6-значный код (только цифры)');
+                alert(t('emailCodeInvalid'));
                 return;
             }
             
@@ -1750,14 +1946,14 @@
                 
                 const result = await response.json();
                 if (result.success) {
-                    alert('Email подтвержден! +500 сум начислено');
+                    alert(t('emailVerified'));
                     closeEmailModal();
                     location.reload();
                 } else {
-                    alert(result.message || 'Неверный код');
+                    alert(result.message || t('invalidCode'));
                 }
             } catch (error) {
-                alert('Ошибка');
+                alert(t('genericError'));
             }
         }
         
@@ -1946,13 +2142,13 @@
     
     <div id="emailModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(10px);">
         <div style="background: linear-gradient(145deg, rgba(0, 240, 255, 0.1), rgba(182, 36, 255, 0.1)); border: 2px solid rgba(0, 240, 255, 0.3); border-radius: 20px; padding: 30px; max-width: 400px; width: 90%; box-shadow: 0 0 40px rgba(0, 240, 255, 0.3);">
-            <h3 style="color: #00f0ff; margin-bottom: 20px; text-shadow: 0 0 15px rgba(0, 240, 255, 0.8);">📧 Подтверждение email</h3>
+            <h3 id="emailModalTitle" style="color: #00f0ff; margin-bottom: 20px; text-shadow: 0 0 15px rgba(0, 240, 255, 0.8);">📧 Подтверждение email</h3>
             <p id="emailText" style="margin-bottom: 20px; color: #a0a0a0;"></p>
             <input type="email" id="emailInput" placeholder="Введите email" autocomplete="off" maxlength="100" style="width: 100%; padding: 12px; border: 2px solid rgba(0, 240, 255, 0.3); background: rgba(0, 0, 0, 0.5); color: white; border-radius: 8px; margin-bottom: 15px; font-size: 16px;">
             <input type="text" id="codeInput" placeholder="Введите код (6 цифр)" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" autocomplete="off" style="width: 100%; padding: 12px; border: 2px solid rgba(0, 240, 255, 0.3); background: rgba(0, 0, 0, 0.5); color: white; border-radius: 8px; margin-bottom: 15px; font-size: 20px; text-align: center; letter-spacing: 5px; display: none;">
             <button onclick="sendEmailCode()" id="sendBtn" style="width: 100%; padding: 12px; background: linear-gradient(135deg, rgba(0, 240, 255, 0.3), rgba(182, 36, 255, 0.3)); color: white; border: 2px solid rgba(0, 240, 255, 0.5); border-radius: 8px; font-size: 16px; cursor: pointer; margin-bottom: 10px; font-weight: 600; text-shadow: 0 0 10px rgba(0, 240, 255, 0.8);">Отправить код</button>
             <button onclick="verifyEmailCode()" id="verifyBtn" style="width: 100%; padding: 12px; background: linear-gradient(135deg, rgba(48, 209, 88, 0.3), rgba(0, 212, 255, 0.3)); color: white; border: 2px solid rgba(48, 209, 88, 0.5); border-radius: 8px; font-size: 16px; cursor: pointer; margin-bottom: 10px; font-weight: 600; display: none;">Подтвердить</button>
-            <button onclick="closeEmailModal()" style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.1); color: #a0a0a0; border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 8px; font-size: 16px; cursor: pointer;">Закрыть</button>
+            <button onclick="closeEmailModal()" id="closeEmailBtn" style="width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.1); color: #a0a0a0; border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 8px; font-size: 16px; cursor: pointer;">Закрыть</button>
         </div>
     </div>
 </body>

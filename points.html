@@ -14,6 +14,7 @@
     ">
   <title>Задания</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="/scripts/i18n.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800;900&display=swap');
     
@@ -715,7 +716,7 @@
       <div class="form-group">
         <label class="form-label">Email</label>
         <input type="email" class="form-input" id="regEmail" placeholder="example@mail.com" autocomplete="off" maxlength="100">
-        <small style="color: var(--accent-gold); font-size: 0.85rem; display: block; margin-top: 8px;">
+        <small class="email-bonus" style="color: var(--accent-gold); font-size: 0.85rem; display: block; margin-top: 8px;">
           💡 Укажите email и получите +500 сум после подтверждения
         </small>
       </div>
@@ -823,6 +824,291 @@
   </div>
   
   <script>
+    const pointsTranslations = {
+      ru: {
+        pageTitle: 'Задания',
+        back: 'Назад',
+        registrationIntro: 'Зарегистрируйтесь и получите 1000 сум в подарок!',
+        emailBonus: '💡 Укажите email и получите +500 сум после подтверждения',
+        registrationTitle: '💎 Система заданий',
+        registrationName: 'Ваше имя *',
+        registrationPhone: 'Номер телефона *',
+        registrationEmail: 'Email',
+        registrationNamePlaceholder: 'Введите ваше имя',
+        balanceLabel: 'сум доступно',
+        tabs: { tasks: 'Задания', referral: 'Реферал', clicks: 'Клики' },
+        daily: {
+          title: 'Ежедневный приз',
+          description: 'Получайте ежедневные награды! С каждым днем сумма растет!',
+          monthly: 'В этом месяце:',
+          day: 'День:',
+          claim: 'Получить приз',
+          claimed: 'Приз получен',
+          next: 'Следующий приз через:'
+        },
+        referral: {
+          title: '🔗 Ваша реферальная ссылка',
+          loading: 'Загрузка...',
+          copy: 'Копировать',
+          invited: 'Приглашено друзей',
+          earned: 'Заработано сум',
+          listTitle: '👥 Приглашенные друзья',
+          empty: 'Пока никого не пригласили',
+          user: 'Пользователь'
+        },
+        clicks: {
+          hold: 'Удерживайте кнопку 6 секунд',
+          reward: 'Награда: 500 сум • 1 раз в 24 часа',
+          nextTitle: '⏰ Следующая попытка через 24 часа',
+          nextBody: 'Вы уже получили награду сегодня!',
+          waiting: 'Ждем следующей попытки...',
+          holdPrecise: 'Удерживайте кнопку 6-7 секунд'
+        },
+        registration: {
+          submit: '🎁 Зарегистрироваться',
+          tooMany: 'Слишком много попыток регистрации',
+          required: 'Заполните обязательные поля',
+          invalidEmail: 'Неверный формат email',
+          submitting: 'Регистрируем...',
+          success: 'Поздравляем! Вы получили 1000 сум!',
+          error: 'Ошибка регистрации',
+          generic: 'Произошла ошибка',
+          verificationTitle: '✉️ Код подтверждения',
+          verificationText: 'Ваш код для подтверждения email',
+          verificationTimer: '⏱️ Код действителен 15 минут',
+          continue: 'Продолжить'
+        },
+        tasks: {
+          loading: '⏳ Загрузка заданий...',
+          empty: '📝 Пока нет доступных заданий',
+          untitled: 'Без названия',
+          noDescription: 'Описание отсутствует',
+          openLink: '🔗 Открыть ссылку',
+          done: 'Выполнено',
+          complete: 'Выполнить'
+        },
+        alerts: {
+          linkCopied: 'Ссылка скопирована!',
+          nextAttempt: 'Следующая попытка доступна через 24 часа!',
+          holdTooLong: 'Вы удерживали слишком долго! Попробуйте еще раз.',
+          holdMore: 'Удерживайте кнопку дольше! Нужно 6-7 секунд.',
+          rewardSuccess: '🎉 Поздравляем! Вы получили {reward} сум!\n\nСледующая попытка через 24 часа.',
+          rewardError: 'Ошибка получения награды',
+          connection: 'Ошибка подключения',
+          wait: 'Подождите немного',
+          dailyLoading: 'Ошибка загрузки ежедневного приза',
+          getting: 'Получаем...',
+          dailySuccess: 'Поздравляем! Вы получили {reward} сум!',
+          dailyError: 'Ошибка получения приза',
+          taskError: 'Ошибка выполнения задания'
+        }
+      },
+      uz: {
+        pageTitle: 'Вазифалар',
+        back: 'Орқага',
+        registrationIntro: 'Рўйхатдан ўтинг ва 1000 сўм бонус олинг!',
+        emailBonus: '💡 Email киритинг ва тасдиқдан кейин +500 сўм олинг',
+        registrationTitle: '💎 Вазифалар тизими',
+        registrationName: 'Исмингиз *',
+        registrationPhone: 'Телефон рақами *',
+        registrationEmail: 'Email',
+        registrationNamePlaceholder: 'Исмингизни киритинг',
+        balanceLabel: 'сўм мавжуд',
+        tabs: { tasks: 'Вазифалар', referral: 'Реферал', clicks: 'Кликлар' },
+        daily: {
+          title: 'Кунлик соврин',
+          description: 'Кунлик мукофотларни олинг! Ҳар куни сумма ўсиб боради!',
+          monthly: 'Бу ойда:',
+          day: 'Кун:',
+          claim: 'Совринни олиш',
+          claimed: 'Соврин олинди',
+          next: 'Кейинги соврин:'
+        },
+        referral: {
+          title: '🔗 Сизнинг реферал ҳаволангиз',
+          loading: 'Юкланмоқда...',
+          copy: 'Нусхалаш',
+          invited: 'Таклиф қилинган дўстлар',
+          earned: 'Ишланган сўм',
+          listTitle: '👥 Таклиф қилинган дўстлар',
+          empty: 'Ҳали ҳеч ким таклиф қилинмаган',
+          user: 'Фойдаланувчи'
+        },
+        clicks: {
+          hold: 'Тугмани 6 сония босиб туринг',
+          reward: 'Мукофот: 500 сўм • 24 соатда 1 марта',
+          nextTitle: '⏰ Кейинги уриниш 24 соатдан кейин',
+          nextBody: 'Сиз бугун мукофотни олгансиз!',
+          waiting: 'Кейинги уринишни кутмоқдамиз...',
+          holdPrecise: 'Тугмани 6-7 сония босиб туринг'
+        },
+        registration: {
+          submit: '🎁 Рўйхатдан ўтиш',
+          tooMany: 'Рўйхатдан ўтиш уринишлари жуда кўп',
+          required: 'Мажбурий майдонларни тўлдиринг',
+          invalidEmail: 'Email формати нотўғри',
+          submitting: 'Рўйхатдан ўтилмоқда...',
+          success: 'Табриклаймиз! Сиз 1000 сўм олдингиз!',
+          error: 'Рўйхатдан ўтишда хатолик',
+          generic: 'Хатолик юз берди',
+          verificationTitle: '✉️ Тасдиқлаш коди',
+          verificationText: 'Email тасдиқлаш коди',
+          verificationTimer: '⏱️ Код 15 дақиқа амал қилади',
+          continue: 'Давом этиш'
+        },
+        tasks: {
+          loading: '⏳ Вазифалар юкланмоқда...',
+          empty: '📝 Ҳозирча очиқ вазифалар йўқ',
+          untitled: 'Номсиз',
+          noDescription: 'Тавсиф йўқ',
+          openLink: '🔗 Ҳаволани очиш',
+          done: 'Бажарилди',
+          complete: 'Бажариш'
+        },
+        alerts: {
+          linkCopied: 'Ҳавола нусхаланди!',
+          nextAttempt: 'Кейинги уриниш 24 соатдан кейин!',
+          holdTooLong: 'Сиз тугмани жуда узоқ босиб турдингиз! Яна бир бор уриниб кўринг.',
+          holdMore: 'Тугмани узоқроқ босиб туринг! 6-7 сония керак.',
+          rewardSuccess: '🎉 Табриклаймиз! Сиз {reward} сўм олдингиз!\n\nКейинги уриниш 24 соатдан кейин.',
+          rewardError: 'Совринни олишда хатолик',
+          connection: 'Уланишда хатолик',
+          wait: 'Бироз кутинг',
+          dailyLoading: 'Кунлик совринни юклашда хатолик',
+          getting: 'Олинмоқда...',
+          dailySuccess: 'Табриклаймиз! Сиз {reward} сўм олдингиз!',
+          dailyError: 'Совринни олишда хатолик',
+          taskError: 'Вазифани бажаришда хатолик'
+        }
+      },
+      en: {
+        pageTitle: 'Tasks',
+        back: 'Back',
+        registrationIntro: 'Register and get a 1000 UZS welcome bonus!',
+        emailBonus: '💡 Add your email and get +500 UZS after verification',
+        registrationTitle: '💎 Task system',
+        registrationName: 'Your name *',
+        registrationPhone: 'Phone number *',
+        registrationEmail: 'Email',
+        registrationNamePlaceholder: 'Enter your name',
+        balanceLabel: 'UZS available',
+        tabs: { tasks: 'Tasks', referral: 'Referral', clicks: 'Clicks' },
+        daily: {
+          title: 'Daily reward',
+          description: 'Claim a daily reward. The amount grows every day!',
+          monthly: 'This month:',
+          day: 'Day:',
+          claim: 'Claim reward',
+          claimed: 'Reward claimed',
+          next: 'Next reward in:'
+        },
+        referral: {
+          title: '🔗 Your referral link',
+          loading: 'Loading...',
+          copy: 'Copy',
+          invited: 'Friends invited',
+          earned: 'UZS earned',
+          listTitle: '👥 Invited friends',
+          empty: 'No invited friends yet',
+          user: 'User'
+        },
+        clicks: {
+          hold: 'Hold the button for 6 seconds',
+          reward: 'Reward: 500 UZS • once every 24 hours',
+          nextTitle: '⏰ Next attempt in 24 hours',
+          nextBody: 'You already claimed today\'s reward.',
+          waiting: 'Waiting for the next attempt...',
+          holdPrecise: 'Hold the button for 6-7 seconds'
+        },
+        registration: {
+          submit: '🎁 Register',
+          tooMany: 'Too many registration attempts',
+          required: 'Fill in the required fields',
+          invalidEmail: 'Invalid email format',
+          submitting: 'Registering...',
+          success: 'Congratulations! You received 1000 UZS!',
+          error: 'Registration error',
+          generic: 'Something went wrong',
+          verificationTitle: '✉️ Verification code',
+          verificationText: 'Your email verification code',
+          verificationTimer: '⏱️ Code is valid for 15 minutes',
+          continue: 'Continue'
+        },
+        tasks: {
+          loading: '⏳ Loading tasks...',
+          empty: '📝 No tasks available yet',
+          untitled: 'Untitled',
+          noDescription: 'No description provided',
+          openLink: '🔗 Open link',
+          done: 'Completed',
+          complete: 'Complete'
+        },
+        alerts: {
+          linkCopied: 'Link copied!',
+          nextAttempt: 'The next attempt will be available in 24 hours!',
+          holdTooLong: 'You held the button for too long. Try again.',
+          holdMore: 'Hold the button a bit longer. You need 6-7 seconds.',
+          rewardSuccess: '🎉 Congratulations! You received {reward} UZS!\n\nYour next attempt will be available in 24 hours.',
+          rewardError: 'Reward claim error',
+          connection: 'Connection error',
+          wait: 'Please wait a moment',
+          dailyLoading: 'Failed to load the daily reward',
+          getting: 'Claiming...',
+          dailySuccess: 'Congratulations! You received {reward} UZS!',
+          dailyError: 'Daily reward error',
+          taskError: 'Task execution error'
+        }
+      }
+    };
+    const t = DKXI18n.createTranslator(pointsTranslations);
+
+    function applyPointsTranslations() {
+      document.title = t('pageTitle');
+      document.documentElement.lang = DKXI18n.getCurrentLanguage();
+      document.querySelector('.back-btn').innerHTML = `← ${t('back')}`;
+      const balanceLabel = document.querySelector('.balance-label');
+      if (balanceLabel) balanceLabel.textContent = t('balanceLabel');
+      const registrationParagraph = document.querySelector('#registrationForm p');
+      if (registrationParagraph) registrationParagraph.textContent = t('registrationIntro');
+      const registrationTitle = document.querySelector('#registrationForm h2');
+      if (registrationTitle) registrationTitle.textContent = t('registrationTitle');
+      const emailBonus = document.querySelector('#registrationForm .email-bonus');
+      if (emailBonus) emailBonus.textContent = t('emailBonus');
+      const registrationLabels = document.querySelectorAll('#registrationForm .form-label');
+      if (registrationLabels[0]) registrationLabels[0].textContent = t('registrationName');
+      if (registrationLabels[1]) registrationLabels[1].textContent = t('registrationPhone');
+      if (registrationLabels[2]) registrationLabels[2].textContent = t('registrationEmail');
+      const regName = document.getElementById('regName');
+      if (regName) regName.placeholder = t('registrationNamePlaceholder');
+      const tabs = document.querySelectorAll('.tab-btn');
+      if (tabs[0]) tabs[0].textContent = t('tabs.tasks');
+      if (tabs[1]) tabs[1].textContent = t('tabs.referral');
+      if (tabs[2]) tabs[2].textContent = t('tabs.clicks');
+      const dailyReward = document.getElementById('dailyReward');
+      if (dailyReward) {
+        dailyReward.querySelector('.daily-title').textContent = t('daily.title');
+        dailyReward.querySelector('.daily-description').textContent = t('daily.description');
+        dailyReward.querySelector('.daily-stats span').childNodes[0].textContent = `${t('daily.monthly')} `;
+        dailyReward.querySelectorAll('.daily-stats span')[1].childNodes[0].textContent = `${t('daily.day')} `;
+        document.getElementById('claimBtn').textContent = t('daily.claim');
+        document.getElementById('dailyTimer').childNodes[0].textContent = `${t('daily.next')} `;
+      }
+      document.querySelector('#referral .info-card h3').textContent = t('referral.title');
+      document.getElementById('referralLink').textContent = t('referral.loading');
+      document.querySelector('.copy-btn span:last-child').textContent = t('referral.copy');
+      const referralStats = document.querySelectorAll('.referral-stats .stat-card div:last-child');
+      if (referralStats[0]) referralStats[0].textContent = t('referral.invited');
+      if (referralStats[1]) referralStats[1].textContent = t('referral.earned');
+      document.querySelectorAll('#referral .info-card h4')[0].textContent = t('referral.listTitle');
+      document.getElementById('referralList').innerHTML = `<p style="color: #a0a0a0; text-align: center;">${t('referral.empty')}</p>`;
+      document.getElementById('holdStatusText').textContent = t('clicks.hold');
+      document.querySelector('.hold-instruction').textContent = t('clicks.reward');
+      document.querySelector('#clicksTimer h4').textContent = t('clicks.nextTitle');
+      document.querySelector('#clicksTimer p').textContent = t('clicks.nextBody');
+      const registerButton = document.querySelector('#registrationForm .btn-primary');
+      if (registerButton) registerButton.textContent = t('registration.submit');
+    }
+
   // XSS защита
     const escapeHtml = (text) => {
         const div = document.createElement('div');
@@ -969,14 +1255,14 @@
         
         // Клиентская защита
         if (!clientRateLimit.check('register', 2, 60000)) {
-            showGameNotification('Слишком много попыток регистрации', 'error');
+            showGameNotification(t('registration.tooMany'), 'error');
             return;
         }
         
         document.activeElement?.blur();
         
         if (!name || !phone) {
-            showGameNotification('Заполните обязательные поля', 'error');
+            showGameNotification(t('registration.required'), 'error');
             return;
         }
         
@@ -986,13 +1272,13 @@
         }
         
         if (email && !isValidEmail(email)) {
-            showGameNotification('Неверный формат email', 'error');
+            showGameNotification(t('registration.invalidEmail'), 'error');
             return;
         }
         
         const btn = document.querySelector('.btn-primary');
         btn.disabled = true;
-        btn.textContent = 'Регистрируем...';
+        btn.textContent = t('registration.submitting');
         
         try {
             const response = await fetch('api.php?action=user_register_points', {
@@ -1007,17 +1293,17 @@
                 if (result.verificationCode) {
                     showVerificationCodeModal(email, result.verificationCode);
                 } else {
-                    showGameNotification('Поздравляем! Вы получили 1000 сум!', 'success');
+                    showGameNotification(t('registration.success'), 'success');
                     await checkUserRegistration();
                 }
             } else {
-                showGameNotification(result.message || 'Ошибка регистрации', 'error');
+                showGameNotification(result.message || t('registration.error'), 'error');
             }
         } catch (error) {
-            showGameNotification('Произошла ошибка', 'error');
+            showGameNotification(t('registration.generic'), 'error');
         } finally {
             btn.disabled = false;
-            btn.textContent = '🎁 Зарегистрироваться';
+            btn.textContent = t('registration.submit');
         }
     }
     
@@ -1026,13 +1312,13 @@
         modal.innerHTML = `
             <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px);">
                 <div style="background: linear-gradient(145deg, rgba(0, 240, 255, 0.15), rgba(182, 36, 255, 0.12)); border: 2px solid rgba(0, 240, 255, 0.5); border-radius: 24px; padding: 32px; max-width: 400px; width: 90%; box-shadow: 0 0 50px rgba(0, 240, 255, 0.4); position: relative;">
-                    <h3 style="color: #00f0ff; margin-bottom: 16px; text-shadow: 0 0 20px rgba(0, 240, 255, 0.8); font-size: 1.4rem; text-align: center;">✉️ Код подтверждения</h3>
-                    <p style="color: #a0a0a0; margin-bottom: 24px; text-align: center; line-height: 1.5;">Ваш код для подтверждения email<br><span style="color: #00f0ff;">${email}</span></p>
+                    <h3 style="color: #00f0ff; margin-bottom: 16px; text-shadow: 0 0 20px rgba(0, 240, 255, 0.8); font-size: 1.4rem; text-align: center;">${t('registration.verificationTitle')}</h3>
+                    <p style="color: #a0a0a0; margin-bottom: 24px; text-align: center; line-height: 1.5;">${t('registration.verificationText')}<br><span style="color: #00f0ff;">${email}</span></p>
                     <div style="background: rgba(0, 0, 0, 0.6); border: 2px solid rgba(0, 240, 255, 0.4); border-radius: 16px; padding: 24px; margin-bottom: 24px; text-align: center;">
                         <div style="font-size: 2.5rem; font-weight: 700; letter-spacing: 8px; color: #00f0ff; text-shadow: 0 0 30px rgba(0, 240, 255, 1); font-family: 'Courier New', monospace;">${code}</div>
                     </div>
-                    <p style="color: #fbbf24; text-align: center; margin-bottom: 20px; font-size: 0.9rem;">⏱️ Код действителен 15 минут</p>
-                    <button onclick="this.closest('div').parentElement.remove(); showGameNotification('Поздравляем! Вы получили 1000 сум!', 'success'); checkUserRegistration();" style="width: 100%; padding: 14px; background: linear-gradient(135deg, rgba(0, 240, 255, 0.3), rgba(182, 36, 255, 0.3)); color: white; border: 2px solid rgba(0, 240, 255, 0.6); border-radius: 12px; font-size: 16px; cursor: pointer; font-weight: 600; text-shadow: 0 0 10px rgba(0, 240, 255, 0.8); transition: all 0.3s;">Продолжить</button>
+                    <p style="color: #fbbf24; text-align: center; margin-bottom: 20px; font-size: 0.9rem;">${t('registration.verificationTimer')}</p>
+                    <button onclick="this.closest('div').parentElement.remove(); showGameNotification(t('registration.success'), 'success'); checkUserRegistration();" style="width: 100%; padding: 14px; background: linear-gradient(135deg, rgba(0, 240, 255, 0.3), rgba(182, 36, 255, 0.3)); color: white; border: 2px solid rgba(0, 240, 255, 0.6); border-radius: 12px; font-size: 16px; cursor: pointer; font-weight: 600; text-shadow: 0 0 10px rgba(0, 240, 255, 0.8); transition: all 0.3s;">${t('registration.continue')}</button>
                 </div>
             </div>
         `;
@@ -1100,7 +1386,7 @@
         document.getElementById('tasksList').appendChild(regularTasksContainer);
       }
       
-      regularTasksContainer.innerHTML = '<div class="task-item"><p style="text-align: center; color: #a0a0a0;">⏳ Загрузка заданий...</p></div>';
+      regularTasksContainer.innerHTML = `<div class="task-item"><p style="text-align: center; color: #a0a0a0;">${t('tasks.loading')}</p></div>`;
       
       try {
         const tasksResponse = await fetch('api.php?action=tasks');
@@ -1116,7 +1402,7 @@
         const completedIds = completedTasks.map(t => parseInt(t.task_id));
         
         if (tasks.length === 0) {
-          regularTasksContainer.innerHTML = '<div class="task-item"><p style="text-align: center; color: #a0a0a0;">📝 Пока нет доступных заданий</p></div>';
+          regularTasksContainer.innerHTML = `<div class="task-item"><p style="text-align: center; color: #a0a0a0;">${t('tasks.empty')}</p></div>`;
           return;
         }
         
@@ -1126,15 +1412,15 @@
           return `
             <div class="task-item">
               <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-                <div style="color: #ffffff; font-weight: 600; font-size: 1.05rem; line-height: 1.3; flex: 1; margin-right: 12px;">${task.title || 'Без названия'}</div>
-                <div style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ffb347 100%); color: white; padding: 6px 14px; border-radius: 25px; font-size: 0.85rem; font-weight: 700; white-space: nowrap; box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);">+${parseInt(task.points || 0).toLocaleString()} сум</div>
+                <div style="color: #ffffff; font-weight: 600; font-size: 1.05rem; line-height: 1.3; flex: 1; margin-right: 12px;">${task.title || t('tasks.untitled')}</div>
+                <div style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ffb347 100%); color: white; padding: 6px 14px; border-radius: 25px; font-size: 0.85rem; font-weight: 700; white-space: nowrap; box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);">+${parseInt(task.points || 0).toLocaleString()} ${t('balanceLabel').split(' ')[0]}</div>
               </div>
-              <div style="color: #b8b8b8; margin-bottom: 16px; line-height: 1.5; font-size: 0.9rem;">${task.description || 'Описание отсутствует'}</div>
+              <div style="color: #b8b8b8; margin-bottom: 16px; line-height: 1.5; font-size: 0.9rem;">${task.description || t('tasks.noDescription')}</div>
               <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-                ${task.link ? `<a href="${task.link}" target="_blank" style="color: #00d4ff; text-decoration: none; font-size: 0.85rem; padding: 6px 12px; background: rgba(0, 212, 255, 0.1); border-radius: 15px; border: 1px solid rgba(0, 212, 255, 0.3); transition: all 0.2s ease;" onclick="registerTaskClick(${task.id})">🔗 Открыть ссылку</a>` : ''}
+                ${task.link ? `<a href="${task.link}" target="_blank" style="color: #00d4ff; text-decoration: none; font-size: 0.85rem; padding: 6px 12px; background: rgba(0, 212, 255, 0.1); border-radius: 15px; border: 1px solid rgba(0, 212, 255, 0.3); transition: all 0.2s ease;" onclick="registerTaskClick(${task.id})">${t('tasks.openLink')}</a>` : ''}
                 ${isCompleted ? 
-                  '<span style="background: linear-gradient(135deg, #28a745, #20c997); color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; box-shadow: 0 2px 6px rgba(40, 167, 69, 0.3);">Выполнено</span>' :
-                  `<button style="background: linear-gradient(135deg, #28a745, #20c997); color: white; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 0.85rem; box-shadow: 0 3px 10px rgba(40, 167, 69, 0.3); transition: all 0.2s ease;" onclick="completeTask(${task.id})">Выполнить задание</button>`
+                  `<span style="background: linear-gradient(135deg, #28a745, #20c997); color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; box-shadow: 0 2px 6px rgba(40, 167, 69, 0.3);">${t('tasks.done')}</span>` :
+                  `<button style="background: linear-gradient(135deg, #28a745, #20c997); color: white; border: none; padding: 10px 20px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 0.85rem; box-shadow: 0 3px 10px rgba(40, 167, 69, 0.3); transition: all 0.2s ease;" onclick="completeTask(${task.id})">${t('tasks.complete')}</button>`
                 }
               </div>
             </div>
@@ -1145,9 +1431,9 @@
         console.error('Ошибка загрузки заданий:', error);
         regularTasksContainer.innerHTML = `
           <div class="task-item">
-            <p style="text-align: center; color: #e74c3c; margin-bottom: 15px;">❌ Ошибка загрузки заданий</p>
+            <p style="text-align: center; color: #e74c3c; margin-bottom: 15px;">❌ ${t('tasks.loading')}</p>
             <button onclick="loadTasks()" style="width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer;">
-              🔄 Повторить попытку
+              🔄 Retry
             </button>
           </div>
         `;
@@ -1169,14 +1455,14 @@
     async function completeTask(taskId) {
         // Клиентская защита от спама
         if (!clientRateLimit.check('task_complete', 3, 10000)) {
-            showGameNotification('Слишком быстро! Подождите немного', 'error');
+            showGameNotification(t('alerts.wait'), 'error');
             return;
         }
         
         const btn = event.target;
         const originalText = btn.textContent;
         btn.disabled = true;
-        btn.textContent = 'Выполняем...';
+        btn.textContent = `${t('tasks.complete')}...`;
       
       try {
         const response = await fetch('api.php?action=task_complete', {
@@ -1188,7 +1474,7 @@
         const result = await response.json();
         
         if (result.success) {
-          window.Telegram.WebApp.showAlert(`Задание выполнено! Вы получили ${result.points} сум!`);
+          window.Telegram.WebApp.showAlert(`${t('tasks.done')}! +${result.points} ${t('balanceLabel').split(' ')[0]}`);
           
           try {
             await loadBalance();
@@ -1200,19 +1486,19 @@
             await loadTasks();
           } catch (tasksError) {
             console.error('Ошибка обновления заданий:', tasksError);
-            btn.textContent = 'Выполнено';
+            btn.textContent = t('tasks.done');
             btn.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
             btn.style.cursor = 'default';
           }
           
         } else {
-          window.Telegram.WebApp.showAlert(result.message || 'Ошибка выполнения задания');
+          window.Telegram.WebApp.showAlert(result.message || t('alerts.taskError'));
           btn.disabled = false;
           btn.textContent = originalText;
         }
       } catch (error) {
         console.error('Ошибка выполнения задания:', error);
-        window.Telegram.WebApp.showAlert('Произошла ошибка при выполнении задания');
+        window.Telegram.WebApp.showAlert(t('alerts.taskError'));
         btn.disabled = false;
         btn.textContent = originalText;
       }
@@ -1250,12 +1536,12 @@
           if (data.referrals && data.referrals.length > 0) {
             listElement.innerHTML = data.referrals.map(ref => 
               `<div style="background: rgba(255,255,255,0.05); padding: 10px; margin: 5px 0; border-radius: 8px;">
-                <span>${ref.name || 'Пользователь'}</span>
-                <span style="float: right; color: #28a745;">+${ref.reward} сум</span>
+                <span>${ref.name || t('referral.user')}</span>
+                <span style="float: right; color: #28a745;">+${ref.reward} ${t('balanceLabel').split(' ')[0]}</span>
               </div>`
             ).join('');
           } else {
-            listElement.innerHTML = '<p style="color: #a0a0a0; text-align: center;">Пока никого не пригласили</p>';
+            listElement.innerHTML = `<p style="color: #a0a0a0; text-align: center;">${t('referral.empty')}</p>`;
           }
         }
         
@@ -1275,7 +1561,7 @@
         
         const listElement = document.getElementById('referralList');
         if (listElement) {
-          listElement.innerHTML = '<p style="color: #a0a0a0; text-align: center;">Пока никого не пригласили</p>';
+          listElement.innerHTML = `<p style="color: #a0a0a0; text-align: center;">${t('referral.empty')}</p>`;
         }
       }
     }
@@ -1283,7 +1569,7 @@
     function copyReferralLink() {
       const link = document.getElementById('referralLink').textContent;
       navigator.clipboard.writeText(link).then(() => {
-        window.Telegram.WebApp.showAlert('Ссылка скопирована!');
+        window.Telegram.WebApp.showAlert(t('alerts.linkCopied'));
       });
     }
 
@@ -1329,11 +1615,11 @@
         if (clicksData.isBlocked) {
             icon.classList.add('disabled');
             timer.style.display = 'block';
-            if (statusText) statusText.textContent = 'Ждем следующей попытки...';
+            if (statusText) statusText.textContent = t('clicks.waiting');
         } else {
             icon.classList.remove('disabled');
             timer.style.display = 'none';
-            if (statusText) statusText.textContent = 'Удерживайте кнопку 6-7 секунд';
+            if (statusText) statusText.textContent = t('clicks.holdPrecise');
         }
     }
     
@@ -1353,7 +1639,7 @@
         e.preventDefault();
         
         if (clicksData.isBlocked || !clicksData.canPlay) {
-            window.Telegram.WebApp.showAlert('Следующая попытка доступна через 24 часа!');
+            window.Telegram.WebApp.showAlert(t('alerts.nextAttempt'));
             return;
         }
         
@@ -1404,7 +1690,7 @@
             
             if (elapsed > TARGET_MAX) {
                 clearInterval(vibrateInterval);
-                failHold('Вы удерживали слишком долго! Попробуйте еще раз.');
+                failHold(t('alerts.holdTooLong'));
                 return;
             }
             
@@ -1421,7 +1707,7 @@
         
         const elapsed = Date.now() - holdStartTime;
         if (elapsed < TARGET_MIN) {
-            failHold('Удерживайте кнопку дольше! Нужно 6-7 секунд.');
+            failHold(t('alerts.holdMore'));
         }
         resetHold();
     }
@@ -1448,7 +1734,7 @@
             const result = await response.json();
             
             if (result.success) {
-                window.Telegram.WebApp.showAlert(`🎉 Поздравляем! Вы получили ${result.reward || 500} сум!\n\nСледующая попытка через 24 часа.`);
+                window.Telegram.WebApp.showAlert(t('alerts.rewardSuccess', { reward: result.reward || 500 }));
                 
                 clicksData.isBlocked = true;
                 clicksData.canPlay = false;
@@ -1459,11 +1745,11 @@
                     startTimer(result.timeLeft); // Было: startGameTimer
                 }
             } else {
-                window.Telegram.WebApp.showAlert(result.message || 'Ошибка получения награды');
+                window.Telegram.WebApp.showAlert(result.message || t('alerts.rewardError'));
             }
         } catch (error) {
             console.error('Ошибка:', error);
-            window.Telegram.WebApp.showAlert('Ошибка подключения');
+            window.Telegram.WebApp.showAlert(t('alerts.connection'));
         }
     }
     
@@ -1603,6 +1889,7 @@
     }
     
     document.addEventListener('DOMContentLoaded', function() {
+      applyPointsTranslations();
       const activeTab = document.querySelector('.tab-btn.active');
       if (activeTab) {
         const slider = document.querySelector('.tab-slider');
@@ -1633,7 +1920,7 @@
     function updateDailyRewardDisplay() {
       if (!dailyRewardData) return;
       
-      document.getElementById('dailyAmount').textContent = `+${dailyRewardData.nextReward} сум`;
+      document.getElementById('dailyAmount').textContent = `+${dailyRewardData.nextReward} ${t('balanceLabel').split(' ')[0]}`;
       document.getElementById('monthlyTotal').textContent = dailyRewardData.monthlyTotal;
       document.getElementById('dayCount').textContent = dailyRewardData.dayCount + 1;
       
@@ -1643,12 +1930,12 @@
       
       if (dailyRewardData.canClaim) {
         claimBtn.disabled = false;
-        claimBtn.textContent = 'Получить приз';
+        claimBtn.textContent = t('daily.claim');
         timer.style.display = 'none';
         task.classList.remove('claimed');
       } else {
         claimBtn.disabled = true;
-        claimBtn.textContent = 'Приз получен';
+        claimBtn.textContent = t('daily.claimed');
         timer.style.display = 'block';
         task.classList.add('claimed');
         
@@ -1663,13 +1950,13 @@
         
         // Клиентская защита
         if (!clientRateLimit.check('claim_daily', 1, 5000)) {
-            showGameNotification('Подождите немного', 'error');
+            showGameNotification(t('alerts.wait'), 'error');
             return;
         }
       
       const btn = document.getElementById('claimBtn');
       btn.disabled = true;
-      btn.textContent = 'Получаем...';
+      btn.textContent = t('alerts.getting');
       
       try {
         const response = await fetch('api.php?action=claim_daily_reward', {
@@ -1681,14 +1968,14 @@
         const result = await response.json();
         
         if (result.success) {
-          window.Telegram.WebApp.showAlert(`Поздравляем! Вы получили ${result.reward} сум!`);
+          window.Telegram.WebApp.showAlert(t('alerts.dailySuccess', { reward: result.reward }));
           
           try {
             await loadDailyRewardStatus();
           } catch (error) {
             console.error('Ошибка обновления статуса ежедневного приза:', error);
             btn.disabled = true;
-            btn.textContent = 'Приз получен';
+            btn.textContent = t('daily.claimed');
             const timer = document.getElementById('dailyTimer');
             const task = document.getElementById('dailyReward');
             timer.style.display = 'block';
@@ -1702,15 +1989,15 @@
           }
           
         } else {
-          window.Telegram.WebApp.showAlert(result.message || 'Ошибка получения приза');
+          window.Telegram.WebApp.showAlert(result.message || t('alerts.dailyError'));
           btn.disabled = false;
-          btn.textContent = 'Получить приз';
+          btn.textContent = t('daily.claim');
         }
       } catch (error) {
         console.error('Ошибка получения приза:', error);
-        window.Telegram.WebApp.showAlert('Ошибка подключения к серверу');
+        window.Telegram.WebApp.showAlert(t('alerts.connection'));
         btn.disabled = false;
-        btn.textContent = 'Получить приз';
+        btn.textContent = t('daily.claim');
       }
     }
     
