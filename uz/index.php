@@ -2,6 +2,25 @@
 require_once __DIR__ . '/config.php';
 $adminsJson = json_encode(Config::getAdmins());
 $dbFile = Config::get('DB_NAME', 'club.db');
+
+function ensureWebhookUsersSchema(SQLite3 $db): void
+{
+    $db->exec("CREATE TABLE IF NOT EXISTS users (
+        telegram_id INTEGER PRIMARY KEY,
+        username TEXT,
+        first_name TEXT,
+        name TEXT,
+        phone TEXT,
+        points INTEGER DEFAULT 0,
+        points_registered BOOLEAN DEFAULT 0,
+        ip_address TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )");
+
+    try {
+        @$db->exec("ALTER TABLE users ADD COLUMN ip_address TEXT");
+    } catch (Exception $e) {}
+}
 function validateTelegramWebApp($initData, $botToken, $maxAge = 86400) {
     if (empty($initData)) {
         return false;
@@ -62,6 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['webhook'])) {
         
         if ($text === '/start' || strpos($text, '/start ref_') === 0) {
             $db = new SQLite3($dbFile);
+            ensureWebhookUsersSchema($db);
             
             $ipAddress = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['HTTP_X_REAL_IP'] ?? $_SERVER['REMOTE_ADDR'] ?? 'unknown';
             
@@ -69,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['webhook'])) {
             $username = $db->escapeString($update['message']['from']['username'] ?? '');
             
             // Проверяем существующего пользователя
-            $stmt = $db->prepare("SELECT id FROM users WHERE telegram_id = :userId");
+            $stmt = $db->prepare("SELECT telegram_id FROM users WHERE telegram_id = :userId");
             $stmt->bindValue(':userId', $userId, SQLITE3_INTEGER);
             $result = $stmt->execute();
             $existingUser = $result->fetchArray(SQLITE3_ASSOC);

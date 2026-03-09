@@ -321,6 +321,10 @@ function initDB() {
         ip_address TEXT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )");
+
+    try {
+        @$db->exec("ALTER TABLE users ADD COLUMN ip_address TEXT");
+    } catch (Exception $e) {}
     
     // Добавьте в функцию initDB() новую таблицу:
      $db->exec("CREATE TABLE IF NOT EXISTS user_notifications (
