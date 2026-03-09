@@ -60,6 +60,9 @@ This makes the project useful both as a deployable tool and as an open-source fo
 ├── points.html            # Rewards/points page
 ├── profile.html           # User profile page
 ├── config.php             # Shared runtime configuration loader
+├── ai/
+│   ├── ClubAnalyticsLight.php
+│   └── analyze.php        # Lightweight AI analytics entrypoint
 ├── database.js            # Optional Node bootstrap helper
 ├── database/
 │   └── schema.sql         # SQLite schema reference
