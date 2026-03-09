@@ -7,6 +7,9 @@
 <p>
   <img src="https://img.shields.io/github/v/release/dkey666/dkx-game-club-os-manager?display_name=tag&label=release&color=00c2ff" alt="Release badge" />
   <img src="https://img.shields.io/github/license/dkey666/dkx-game-club-os-manager?color=22c55e" alt="License badge" />
+  <img src="https://img.shields.io/github/last-commit/dkey666/dkx-game-club-os-manager?color=f97316" alt="Last commit badge" />
+  <img src="https://img.shields.io/github/issues/dkey666/dkx-game-club-os-manager?color=ec4899" alt="Issues badge" />
+  <img src="https://img.shields.io/github/stars/dkey666/dkx-game-club-os-manager?style=flat&color=facc15" alt="Stars badge" />
   <img src="https://img.shields.io/badge/PHP-8.1%2B-777BB4?logo=php&logoColor=white" alt="PHP badge" />
   <img src="https://img.shields.io/badge/SQLite-local%20storage-0f172a?logo=sqlite&logoColor=74c0fc" alt="SQLite badge" />
   <img src="https://img.shields.io/badge/Telegram-WebApp-26A5E4?logo=telegram&logoColor=white" alt="Telegram badge" />
@@ -256,31 +259,76 @@ Current lightweight coverage includes:
 
 ## Screenshots
 
-### Bot and onboarding
-
-![Bot start](screenshots/bot-start.jpg)
-![Preloader](screenshots/preloader-screen.jpg)
-![Registration flow](screenshots/registration-flow.jpg)
-
-### Main WebApp
-
-![Main homepage](screenshots/main-homepage.jpg)
-![Main homepage secondary](screenshots/main-homepage-secondary.jpg)
-![Main homepage ranking](screenshots/main-homepage-ranking.jpg)
-
-### Booking and profile
-
-![Booking page](screenshots/booking-page.jpg)
-![Booking select](screenshots/booking-select.jpg)
-![Profile page](screenshots/profile-page.jpg)
-![Profile history](screenshots/profile-history.jpg)
-![Profile statistics](screenshots/profile-statistics.jpg)
-
-### Content pages
-
-![About page](screenshots/about-page.jpg)
-![About page secondary](screenshots/about-page-secondary.jpg)
-![About page social](screenshots/about-page-social.jpg)
+<table>
+  <tr>
+    <td align="center" width="33%">
+      <a href="screenshots/bot-start.jpg"><img src="screenshots/bot-start.jpg" alt="Bot start" width="100%" /></a>
+      <br />
+      <strong>Bot Start</strong>
+    </td>
+    <td align="center" width="33%">
+      <a href="screenshots/preloader-screen.jpg"><img src="screenshots/preloader-screen.jpg" alt="Preloader" width="100%" /></a>
+      <br />
+      <strong>Preloader</strong>
+    </td>
+    <td align="center" width="33%">
+      <a href="screenshots/registration-flow.jpg"><img src="screenshots/registration-flow.jpg" alt="Registration flow" width="100%" /></a>
+      <br />
+      <strong>Registration Flow</strong>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <a href="screenshots/main-homepage.jpg"><img src="screenshots/main-homepage.jpg" alt="Main homepage" width="100%" /></a>
+      <br />
+      <strong>Main Homepage</strong>
+    </td>
+    <td align="center" width="33%">
+      <a href="screenshots/main-homepage-secondary.jpg"><img src="screenshots/main-homepage-secondary.jpg" alt="Secondary homepage" width="100%" /></a>
+      <br />
+      <strong>Homepage Secondary</strong>
+    </td>
+    <td align="center" width="33%">
+      <a href="screenshots/main-homepage-ranking.jpg"><img src="screenshots/main-homepage-ranking.jpg" alt="Rankings" width="100%" /></a>
+      <br />
+      <strong>Rankings View</strong>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <a href="screenshots/booking-page.jpg"><img src="screenshots/booking-page.jpg" alt="Booking page" width="100%" /></a>
+      <br />
+      <strong>Booking</strong>
+    </td>
+    <td align="center" width="33%">
+      <a href="screenshots/profile-page.jpg"><img src="screenshots/profile-page.jpg" alt="Profile page" width="100%" /></a>
+      <br />
+      <strong>Profile</strong>
+    </td>
+    <td align="center" width="33%">
+      <a href="screenshots/profile-statistics.jpg"><img src="screenshots/profile-statistics.jpg" alt="Profile statistics" width="100%" /></a>
+      <br />
+      <strong>Player Statistics</strong>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <a href="screenshots/about-page.jpg"><img src="screenshots/about-page.jpg" alt="About page" width="100%" /></a>
+      <br />
+      <strong>About Screen</strong>
+    </td>
+    <td align="center" width="33%">
+      <a href="screenshots/about-page-secondary.jpg"><img src="screenshots/about-page-secondary.jpg" alt="About secondary" width="100%" /></a>
+      <br />
+      <strong>About Secondary</strong>
+    </td>
+    <td align="center" width="33%">
+      <a href="screenshots/about-page-social.jpg"><img src="screenshots/about-page-social.jpg" alt="About social" width="100%" /></a>
+      <br />
+      <strong>Social / Contact View</strong>
+    </td>
+  </tr>
+</table>
 
 ## License
 
