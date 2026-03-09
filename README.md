@@ -1,24 +1,76 @@
+<div align="center">
+
 # Dkx Game Club OS/Manager
 
-Open-source Telegram-first platform for gaming club operations, player engagement, and AI-assisted analytics. The project combines a PHP backend, SQLite storage, Telegram bot/webhook flows, a customer-facing WebApp, and an admin panel for bookings, points, tasks, referrals, ranks, daily rewards, and operational statistics.
+<img src="https://readme-typing-svg.demolab.com?font=Exo+2&weight=700&size=22&duration=2600&pause=1000&color=00C2FF&center=true&vCenter=true&width=980&lines=Telegram-first+gaming+club+operating+system;Bookings%2C+rewards%2C+ranks%2C+tasks%2C+referrals;Admin+workflows+%2B+AI-assisted+analytics;Open-source+foundation+for+gaming+club+operations" alt="Project tagline animation" />
 
-It is designed for gaming clubs that need more than a simple booking page: the goal is to unify operations, retention mechanics, and decision-support analytics in one extensible open-source system.
+<p>
+  <img src="https://img.shields.io/github/v/release/dkey666/dkx-game-club-os-manager?display_name=tag&label=release&color=00c2ff" alt="Release badge" />
+  <img src="https://img.shields.io/github/license/dkey666/dkx-game-club-os-manager?color=22c55e" alt="License badge" />
+  <img src="https://img.shields.io/badge/PHP-8.1%2B-777BB4?logo=php&logoColor=white" alt="PHP badge" />
+  <img src="https://img.shields.io/badge/SQLite-local%20storage-0f172a?logo=sqlite&logoColor=74c0fc" alt="SQLite badge" />
+  <img src="https://img.shields.io/badge/Telegram-WebApp-26A5E4?logo=telegram&logoColor=white" alt="Telegram badge" />
+  <img src="https://img.shields.io/badge/OpenAI-analytics-111827?logo=openai&logoColor=white" alt="OpenAI badge" />
+</p>
+
+<p>
+  <a href="#quick-start"><strong>Quick Start</strong></a> •
+  <a href="#repository-layout"><strong>Repository Layout</strong></a> •
+  <a href="#ai-analytics-module"><strong>AI Module</strong></a> •
+  <a href="#screenshots"><strong>Screenshots</strong></a> •
+  <a href="#documentation"><strong>Docs</strong></a>
+</p>
+
+</div>
+
+> Open-source Telegram-first platform for gaming club operations, player engagement, and AI-assisted analytics.
+
+Dkx Game Club OS/Manager combines a PHP backend, SQLite storage, Telegram bot and webhook flows, a customer-facing WebApp, and an admin panel for bookings, rewards, ranks, daily bonuses, referrals, tasks, notifications, and operational statistics.
+
+It is built for gaming clubs that need more than a simple booking page. The project connects daily operations, retention mechanics, and decision-support analytics into one extensible open-source system.
 
 ## Why this repository exists
 
-This repository is the public OSS version of the club management platform previously used in production under a private brand/domain. It has been prepared for publication by:
+This repository is the public OSS version of a club management platform that was previously used under a private brand/domain. It was prepared for open-source publication by moving secrets to `.env`, documenting installation and architecture, formalizing dependencies, and separating runtime artifacts from source control.
 
-- moving secrets to `.env`
-- adding `.env.example`
-- documenting installation and architecture
-- formalizing PHP and Node dependencies
-- separating local runtime artifacts from source control
+## Highlights
+
+<table>
+  <tr>
+    <td width="33%" valign="top">
+      <h3>🎮 Player WebApp</h3>
+      <p>Telegram-connected booking flow with profile, rewards, referral links, daily bonuses, and rank progression.</p>
+    </td>
+    <td width="33%" valign="top">
+      <h3>🛠️ Admin Control</h3>
+      <p>Real-time management for PCs, bookings, users, tasks, balances, and operating statistics.</p>
+    </td>
+    <td width="33%" valign="top">
+      <h3>🤖 AI Analytics</h3>
+      <p>Structured analytics pipeline for hall demand, top PCs, traffic peaks, and actionable improvement ideas.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="33%" valign="top">
+      <h3>🏆 Retention Loops</h3>
+      <p>Points, ranks, tap-to-earn, daily claims, referral rewards, and task-based engagement flows.</p>
+    </td>
+    <td width="33%" valign="top">
+      <h3>🌍 Localization</h3>
+      <p>Russian, Uzbek, and English user-facing support with Telegram-aware language handling.</p>
+    </td>
+    <td width="33%" valign="top">
+      <h3>🔓 OSS-Ready</h3>
+      <p>MIT license, docs, changelog, roadmap, screenshots, templates, and contributor-facing repository health files.</p>
+    </td>
+  </tr>
+</table>
 
 ## Why it matters
 
-Most gaming club software covers only one narrow layer of the business: bookings, CRM, or messaging. Dkx Game Club OS/Manager is structured to connect these layers inside a Telegram-first workflow that players already use. The result is a system that helps clubs manage computers and bookings, keep users returning through rewards and progression, and understand real usage patterns through analytics rather than guesswork.
+Most gaming club software solves only one narrow layer of the business: bookings, CRM, or messaging. Dkx Game Club OS/Manager connects these layers inside a Telegram-first workflow that players already use. The result is a system that helps clubs manage computers and bookings, keep users returning through rewards and progression, and understand real usage patterns through analytics instead of guesswork.
 
-## Core features
+## Core capabilities
 
 - Telegram WebApp entrypoint with request validation
 - Booking flow for gaming PCs
@@ -27,7 +79,7 @@ Most gaming club software covers only one narrow layer of the business: bookings
 - Task-based engagement flows such as social actions and promotional activities
 - AI-oriented analytics for user behavior, booking trends, visitor peaks, and operational recommendations
 - Email verification flow via SMTP + PHPMailer
-- Russian / Uzbek UI split via `/` and `/uz`
+- Russian, Uzbek, and English support for the player-facing experience
 - SQLite-based storage for quick local setup
 
 ## Product overview
@@ -41,6 +93,15 @@ On the operations side, administrators can manage PC statuses, review bookings, 
 This makes the project useful both as a deployable tool and as an open-source foundation. Clubs can adapt it to local workflows, while contributors can extend clear areas such as booking rules, gamified retention logic, analytics prompts, admin tooling, or localization support.
 
 ## Tech stack
+
+<p>
+  <img src="https://img.shields.io/badge/backend-PHP%208.1%2B-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP backend" />
+  <img src="https://img.shields.io/badge/storage-SQLite-0f172a?style=for-the-badge&logo=sqlite&logoColor=74c0fc" alt="SQLite storage" />
+  <img src="https://img.shields.io/badge/frontend-HTML%20%2B%20CSS%20%2B%20Vanilla%20JS-f97316?style=for-the-badge&logo=javascript&logoColor=white" alt="Frontend stack" />
+  <img src="https://img.shields.io/badge/integration-Telegram%20Bot%20API-26A5E4?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram integration" />
+  <img src="https://img.shields.io/badge/mail-PHPMailer-16a34a?style=for-the-badge" alt="PHPMailer" />
+  <img src="https://img.shields.io/badge/AI-OpenAI%20Responses-111827?style=for-the-badge&logo=openai&logoColor=white" alt="OpenAI responses" />
+</p>
 
 - PHP 8.1+ for backend endpoints and Telegram webhook handling
 - SQLite for local persistence
