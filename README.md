@@ -28,7 +28,7 @@
 
 > Open-source Telegram-first platform for gaming club operations, player engagement, and AI-assisted analytics.
 
-Dkx Game Club OS/Manager combines a PHP backend, SQLite storage, Telegram bot and webhook flows, a customer-facing WebApp, and an admin panel for bookings, rewards, ranks, daily bonuses, referrals, tasks, notifications, and operational statistics.
+Game Club Manager combines a PHP backend, SQLite storage, Telegram bot and webhook flows, a customer-facing WebApp, and an admin panel for bookings, rewards, ranks, daily bonuses, referrals, tasks, notifications, and operational statistics.
 
 It is built for gaming clubs that need more than a simple booking page. The project connects daily operations, retention mechanics, and decision-support analytics into one extensible open-source system.
 
@@ -87,7 +87,7 @@ Most gaming club software solves only one narrow layer of the business: bookings
 
 ## Product overview
 
-Dkx Game Club OS/Manager is designed as an open-source operating system for gaming clubs that want both operational tooling and player retention mechanics in one place.
+Game Club Manager is designed as an open-source operating system for gaming clubs that want both operational tooling and player retention mechanics in one place.
 
 On the player side, the system provides a Telegram-connected WebApp where users can book PCs, register profiles, accumulate loyalty points, unlock higher ranks based on total progress, claim daily bonuses, use a tap-to-earn mechanic with a capped daily reward, complete engagement tasks such as subscribing to social channels, and invite friends through referral links to earn additional rewards.
 
